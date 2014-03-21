@@ -12,6 +12,7 @@ This addon is currently in beta phase and under heavy development. [Please help 
 Installation
 ------------
 You have several options:
+
 1. You can install it direct over the addon manager of confluence.
 2. You can download it from [Marketplace](https://marketplace.atlassian.com/plugins/org.echocat.adam) and install it manually.
 
