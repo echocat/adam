@@ -1,0 +1,62 @@
+#* @vtlvariable name="action" type="org.echocat.adam.administration.AdministrationAction" *#
+#* @vtlvariable name="i18n" type="com.atlassian.confluence.util.i18n.I18NBean" *#
+#* @vtlvariable name="generalUtil" type="com.atlassian.confluence.util.GeneralUtil" *#
+
+<html>
+<head>
+    <title>${i18n.getText("org.echocat.adam.administration.label")}</title>
+    <meta name="decorator" content="atl.admin" />
+    <content tag="selectedWebItem">administrationWebItem</content>
+    $webResourceManager.requireResource("com.atlassian.auiplugin:ajs")
+    $webResourceManager.requireResource("org.echocat.adam:codemirror")
+    $webResourceManager.requireResource("org.echocat.adam:administrationResources")
+
+</head>
+<body class="first">
+
+    <div class="adam-configuration first">
+        #parse ( "/template/includes/actionerrors.vm" )
+
+        #applyDecorator("form-aui")
+            #decoratorParam("formName" "configurationForm")
+            #decoratorParam("submitAction"  "$req.contextPath/plugins/org.echocat.adam/administration.action")
+            #decoratorParam("cancelAction"  "$req.contextPath/plugins/org.echocat.adam/administration.action")
+            #decoratorParam("editMode" "true")
+            #decoratorParam("method" "POST")
+
+            <fieldset class="first">
+                #bodytag ("Component" "name='configurationXml'" "id=configurationXml" "template='textarea.vm'" "theme='aui'")
+                    #param ("label" "$action.getText('org.echocat.adam.configurationXml.label')")
+                    #param ("rows" 30)
+                    #param ("cols" 80)
+                #end ## bodytag Component
+                <div class="field-group description">
+                    #if ($action.configurationValid)
+                        <p class="success">
+                            $!{i18n.getText("org.echocat.adam.configurationXml.valid")}
+                        </p>
+                    #end
+
+                    $!{i18n.getText("org.echocat.adam.configurationXml.desc")}
+                </div>
+            </fieldset>
+
+        #if ($action.saveRequested and !$action.hasFieldErrors())
+            <fieldset>
+                <div class="field-group success">
+                    $!{i18n.getText("org.echocat.adam.saveSuccessfulMessage")}
+                </div>
+            </fieldset>
+        #end
+        <div class="buttons-container">
+            <div class="buttons">
+                <input type="submit" name="save" class="aui-button submit" value="${generalUtil.escapeForHtmlAttribute($i18n.getText("save.name"))}">
+                <input type="submit" name="validate" class="aui-button submit" value="${generalUtil.escapeForHtmlAttribute($i18n.getText("org.echocat.adam.validateConfiguration.label"))}">
+                <input type="submit" name="reset" class="aui-button-link aui-button submit" value="${generalUtil.escapeForHtmlAttribute($i18n.getText("org.echocat.adam.reset.label"))}">
+            </div>
+        </div>
+
+        #end ## applyDecorator form-aui
+    </div>
+</body>
+</html>

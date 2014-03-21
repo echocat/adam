@@ -1,0 +1,9 @@
+<component name="CopyrightManager">
+  <copyright>
+    <option name="notice" value="**** BEGIN LICENSE BLOCK *****&#10;&#10;&amp;#36;project.name, Copyright (c) #if(&amp;#36;today.year &lt;= 2014)&amp;#36;today.year#else&amp;#36;!{null}2014-&amp;#36;today.year#end&amp;#36;!{null} echocat&#10;&#10;This library is free software; you can redistribute it and/or&#10;modify it under the terms of the GNU Lesser General Public&#10;License as published by the Free Software Foundation; either&#10;version 3.0 of the License, or (at your option) any later version.&#10;&#10;This library is distributed in the hope that it will be useful,&#10;but WITHOUT ANY WARRANTY; without even the implied warranty of&#10;MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU&#10;Lesser General Public License for more details.&#10;&#10;You should have received a copy of the GNU Lesser General Public&#10;License along with this library.&#10;&#10;**** END LICENSE BLOCK *****" />
+    <option name="keyword" value="Copyright" />
+    <option name="allowReplaceKeyword" value="BEGIN LICENSE BLOCK" />
+    <option name="myName" value="echocat" />
+    <option name="myLocal" value="true" />
+  </copyright>
+</component>

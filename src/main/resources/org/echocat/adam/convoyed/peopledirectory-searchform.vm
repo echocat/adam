@@ -1,0 +1,18 @@
+<!--$action.getText("people.search.desc")<br/>-->
+
+<script type="text/javascript">
+    function submitClear(elementId)
+    {
+        var element = document.getElementById(elementId);
+        element.value = "";
+    }
+</script>
+
+<form name="peoplesearch" id="people-search" action="dopeopledirectorysearch.action" method="post" class="aui">
+    <input id="queryString" name="queryString" type="text" size="30" class="text" value="$!generalUtil.htmlEncode($action.queryString)">
+    <input type="submit" name="search" class="aui-button" value="$action.getText("search.name")">
+    <input type="submit" name="clear" class="aui-button aui-button-link" value="$action.getText("clear.name")" onclick="submitClear('queryString')">
+    <input type="hidden" name="startIndex" value="0">
+    <input type="hidden" name="view" value="$!generalUtil.htmlEncode($action.view)">
+    <input type="hidden" name="report" value="$!generalUtil.htmlEncode($action.report)">
+</form>

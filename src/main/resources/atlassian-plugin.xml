@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  ~ **** BEGIN LICENSE BLOCK *****
+  ~
+  ~ echocat Adam, Copyright (c) 2014 echocat
+  ~
+  ~ This library is free software; you can redistribute it and/or
+  ~ modify it under the terms of the GNU Lesser General Public
+  ~ License as published by the Free Software Foundation; either
+  ~ version 3.0 of the License, or (at your option) any later version.
+  ~
+  ~ This library is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+  ~ Lesser General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Lesser General Public
+  ~ License along with this library.
+  ~
+  ~ **** END LICENSE BLOCK *****
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+
+<atlassian-plugin key="${project.groupId}.${project.artifactId}" name="${project.name}" plugins-version="2"
+                  xmlns="http://www.atlassian.com/schema/plugins"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://www.atlassian.com/schema/plugins https://bitbucket.org/atlassian/atlassian-xsd/raw/5e78bb51fddadbfacb3386551675cf00f1f94566/confluence/confluence-3.5.xsd">
+    <plugin-info>
+        <description>${project.description}</description>
+        <version>${project.version}</version>
+        <vendor name="${project.organization.name}" url="${project.organization.url}"/>
+        <param name="plugin-icon">org/echocat/adam/assets/adamIcon.png</param>
+        <param name="plugin-logo">org/echocat/adam/assets/adamLogo.png</param>
+        <param name="configure.url">/plugins/${project.groupId}.${project.artifactId}/administration.action</param>
+    </plugin-info>
+
+    <!-- =================================================================================================================== -->
+
+    <resource key="assets" type="download" name="assets/" location="org/echocat/adam/assets" />
+    <resource key="i18n" type="i18n" name="i18n" location="org/echocat/adam/messages" />
+
+    <!-- =================================================================================================================== -->
+
+    <component-import key="documentationBeanFactory" name="Documentation bean factory" interface="com.atlassian.confluence.util.i18n.DocumentationBeanFactory"/>
+    <component-import key="settingsManager" name="Settings manager" interface="com.atlassian.confluence.setup.settings.SettingsManager"/>
+    <component-import key="permissionManager" name="Permission manager" interface="com.atlassian.confluence.security.PermissionManager"/>
+    <component-import key="groupManager" name="Group manager" interface="com.atlassian.user.GroupManager"/>
+    <component-import key="localeManager" name="Locale manager" interface="com.atlassian.confluence.languages.LocaleManager"/>
+    <component-import key="wikiStyleRenderer" name="Wiki style renderer" interface="com.atlassian.renderer.WikiStyleRenderer"/>
+    <component-import key="bandanaManager" name="Bandana manager" interface="com.atlassian.bandana.BandanaManager"/>
+    <component-import key="userDetailsManager" name="User details manager" interface="com.atlassian.confluence.user.UserDetailsManager"/>
+    <component-import key="transactionTemplate" name="Transaction template" interface="com.atlassian.sal.api.transaction.TransactionTemplate"/>
+    <component-import key="personalInformationManager" name="Personal information manager" interface="com.atlassian.confluence.user.PersonalInformationManager"/>
+    <component-import key="crowdDirectoryService" name="Crowd directory service" interface="com.atlassian.crowd.embedded.api.CrowdDirectoryService"/>
+    <component-import key="confluenceIndexer" name="Confluence indexer" interface="com.atlassian.confluence.search.ConfluenceIndexer"/>
+    <component-import key="eventPublisher" name="Event publisher" interface="com.atlassian.event.api.EventPublisher"/>
+    <component-import key="userAccessor" name="User accessor" interface="com.atlassian.confluence.user.UserAccessor"/>
+    <component-import key="i18NBeanFactory" name="User accessor" interface="com.atlassian.confluence.util.i18n.I18NBeanFactory"/>
+    <component-import key="xhtmlContent" name="XHTML content" interface="com.atlassian.confluence.xhtml.api.XhtmlContent"/>
+    <component-import key="luceneAnalyzerFactory" name="Lucene analyzer factory" interface="com.atlassian.bonnie.analyzer.LuceneAnalyzerFactory"/>
+    <component-import key="velocity-renderer" name="Velocity renderer" interface="com.atlassian.templaterenderer.TemplateRenderer" />
+    <component-import key="userManager" name="User manager" interface="com.atlassian.sal.api.user.UserManager" />
+    <component-import key="loginUriProvider" name="Login URI provider" interface="com.atlassian.sal.api.auth.LoginUriProvider" />
+
+    <!-- =================================================================================================================== -->
+
+    <component key="configurationRepository" name="Configuration repository" class="org.echocat.adam.configuration.ConfigurationRepository" />
+    <component key="accessProvider" name="Access provider" class="org.echocat.adam.access.AccessProvider" />
+    <component key="groupProvider" name="Group provider" class="org.echocat.adam.profile.GroupProvider" />
+    <component key="profileProvider" name="Profile provider" class="org.echocat.adam.profile.ProfileProvider" />
+    <component key="profileModelProvider" name="Profile model provider" class="org.echocat.adam.profile.ProfileModelProvider" />
+    <component key="elementModelProvider" name="Element model provider" class="org.echocat.adam.profile.element.ElementModelProvider" />
+    <component key="reportProvider" name="Report provider" class="org.echocat.adam.report.ReportProvider" />
+
+    <component key="extendingLDAPDirectoryInstanceLoader" name="Extending LDAP directory instance loader" class="org.echocat.adam.directory.ExtendingLDAPDirectoryInstanceLoader"/>
+    <component key="directoryHelper" name="Directory helper" class="org.echocat.adam.directory.DirectoryHelper"/>
+    <component key="elementRenderer" name="Element renderer" class="org.echocat.adam.profile.element.ElementRenderer" />
+    <component key="groupRenderer" name="Group renderer" class="org.echocat.adam.profile.GroupRenderer" />
+    <component key="columnRenderer" name="Column renderer" class="org.echocat.adam.report.ColumnRenderer" />
+    <component key="localizationHelper" name="Element model localization helper" class="org.echocat.adam.localization.LocalizationHelper"/>
+    <component key="ldapDirectorySynchronizer" name="LDAP directory synchronizer" class="org.echocat.adam.synchronization.LdapDirectorySynchronizer" />
+    <component key="userProfileMacroRenderer" name="User profile macro renderer" class="org.echocat.adam.profile.ViewMyUserProfileWebPanel"  />
+
+    <!-- =================================================================================================================== -->
+
+    <job key="ldapDirectorySynchronizationJob" name="LDAP directory synchronization job" class="org.echocat.adam.synchronization.LdapDirectorySynchronizationJob"/>
+    <trigger key="ldapDirectorySynchronizationTrigger" name="LDAP directory synchronization trigger">
+        <job key="ldapDirectorySynchronizationJob"/>
+        <schedule cron-expression="0 44 0,3,6,9,12,15,18,21 * * ?"/>
+        <managed editable="true" keepingHistory="true" canRunAdhoc="true" canDisable="true"/>
+    </trigger>
+    <listener key='ldapDirectorySynchronizationRequiredEventListener' name='LDAP directory synchronization required event listener' class='org.echocat.adam.synchronization.LdapDirectorySynchronizationRequiredEventListener' />
+
+    <!-- =================================================================================================================== -->
+
+    <extractor key="userProfileDataExtractor" name="User profile data extractor" class="org.echocat.adam.profile.ProfileDataExtractor" priority="900" />
+    <lucene-search-filter-mapper key="userProfileDataFilterMapper" name="User profile data filter mapper" class="org.echocat.adam.profile.UserProfileDataFilterMapper" handles="userProfileDataFilter" />
+    <lucene-query-mapper key="userProfileDataQueryMapper" name="User profile data query mapper" class="org.echocat.adam.profile.UserProfileDataQueryMapper" handles="userProfileDataQuery" />
+
+    <!-- =================================================================================================================== -->
+
+    <web-resource key="userProfileResources" name="User profile resources">
+        <resource type="download" name="UserProfile.css" location="org/echocat/adam/profile/UserProfile.css"/>
+        <context>atl.general</context>
+    </web-resource>
+
+    <xhtml-macro name="user-profile" key="userProfileMacro" class="org.echocat.adam.profile.UserProfileMacro" icon="/images/icons/profilepics/anonymous.png">
+        <category name="confluence-content" />
+        <parameters>
+            <parameter name="username" type="username" required="true" />
+        </parameters>
+    </xhtml-macro>
+
+    <web-panel key="viewMyUserProfileWebPanel" name="View my user profile WebPanel" location="atl.confluence.userprofile.info.advanced" weight="100" class="org.echocat.adam.profile.ViewMyUserProfileWebPanel" />
+    <web-panel key="editUserProfileWebPanel" name="Edit user profile WebPanel" location="atl.confluence.userprofile.edit" weight="100" class="org.echocat.adam.profile.EditUserProfileWebPanel" />
+
+    <!-- =================================================================================================================== -->
+
+    <!-- conveyor name="Action overrides" key="actionOverrides" state="enabled">
+        <resource type="xml" name="conveyor-config" location="/org/echocat/adam/convoyed/conveyor-config.xml" />
+    </conveyor -->
+
+    <listener name="Action Conveyor" class="org.randombits.confluence.conveyor.ConveyorListener" key="actionConveyor">
+        <description>Sets up the action conveyor for this plugin.</description>
+    </listener>
+
+    <!-- =================================================================================================================== -->
+
+    <xwork name="Actions" key="actions">
+        <package name="Administration" extends="default" namespace="/plugins/${project.groupId}.${project.artifactId}">
+            <default-interceptor-ref name="defaultStack" />
+            <action name="administration" class="org.echocat.adam.administration.AdministrationAction">
+                <result name="display" type="velocity">/org/echocat/adam/administration/AdministrationAction.vm</result>
+            </action>
+        </package>
+    </xwork>
+
+    <web-resource key="codemirror" name="codemirror">
+        <resource type="download" name="lib/codemirror.js" location="org/echocat/adam/resources/codemirror/lib/codemirror.js" />
+        <resource type="download" name="lib/codemirror.css" location="org/echocat/adam/resources/codemirror/lib/codemirror.css" />
+        <resource type="download" name="lib/jquery.ui.resizable.js" location="org/echocat/adam/resources/codemirror/lib/jquery.ui.resizable.js" />
+        <resource type="download" name="lib/jquery.ui.resizable.css" location="org/echocat/adam/resources/codemirror/lib/jquery.ui.resizable.css" />
+
+        <resource type="download" name="mode/xml/xml.js" location="org/echocat/adam/resources/codemirror/mode/xml/xml.js" />
+        <resource type="download" name="theme/eclipse.css" location="org/echocat/adam/resources/codemirror/theme/eclipse.css" />
+
+        <resource type="download" name="addon/fold/foldcode.js" location="org/echocat/adam/resources/codemirror/addon/fold/foldcode.js" />
+        <resource type="download" name="addon/fold/comment-fold.js" location="org/echocat/adam/resources/codemirror/addon/fold/comment-fold.js" />
+        <resource type="download" name="addon/fold/foldgutter.css" location="org/echocat/adam/resources/codemirror/addon/fold/foldgutter.css" />
+        <resource type="download" name="addon/fold/foldgutter.js" location="org/echocat/adam/resources/codemirror/addon/fold/foldgutter.js" />
+        <resource type="download" name="addon/fold/xml-fold.js" location="org/echocat/adam/resources/codemirror/addon/fold/xml-fold.js" />
+        <resource type="download" name="addon/hint/xml-hint.js" location="org/echocat/adam/resources/codemirror/addon/hint/xml-hint.js" />
+        <resource type="download" name="addon/comment/comment.js" location="org/echocat/adam/resources/codemirror/addon/comment/comment.js" />
+        <resource type="download" name="addon/edit/closetag.js" location="org/echocat/adam/resources/codemirror/addon/edit/closetag.js" />
+        <context>atl.general</context>
+    </web-resource>
+
+    <web-resource key="administrationResources" name="Administration resources">
+        <resource type="download" name="AdministrationAction.js" location="/org/echocat/adam/administration/AdministrationAction.js"/>
+        <resource type="download" name="AdministrationAction.css" location="/org/echocat/adam/administration/AdministrationAction.css"/>
+        <context>atl.general</context>
+    </web-resource>
+
+    <web-item key="administrationWebItem" name="Administration Web-Item" section="system.admin/security" weight="110">
+        <label key="${project.groupId}.${project.artifactId}.administration.label" />
+        <link>/plugins/${project.groupId}.${project.artifactId}/administration.action</link>
+    </web-item>
+
+</atlassian-plugin>

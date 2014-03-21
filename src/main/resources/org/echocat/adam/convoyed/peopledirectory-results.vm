@@ -1,0 +1,131 @@
+#* @vtlvariable name="queryString" type="java.lang.String" *#
+#* @vtlvariable name="searchResults" type="java.util.List<java.lang.String>" *#
+#* @vtlvariable name="profiles" type="java.util.List<org.echocat.adam.profile.Profile>" *#
+#* @vtlvariable name="columns" type="java.util.List<org.echocat.adam.report.Column>" *#
+#* @vtlvariable name="reports" type="java.util.List<org.echocat.adam.report.Report>" *#
+#* @vtlvariable name="action" type="org.echocat.adam.profile.ExtendedPeopleDirectoryAction" *#
+#* @vtlvariable name="generalUtil" type="com.atlassian.confluence.util.GeneralUtil" *#
+#* @vtlvariable name="columnRenderer" type="org.echocat.adam.report.ColumnRenderer" *#
+#* @vtlvariable name="localizationHelper" type="org.echocat.adam.localization.LocalizationHelper" *#
+#* @vtlvariable name="reportProvider" type="org.echocat.adam.report.ReportProvider" *#
+<html>
+<head>
+    <title>$action.getActionName($action.getClass().getName())</title>
+    #requireResourcesForContext("people")
+</head>
+<body>
+    #set($locale = $localizationHelper.getLocaleFor($action.authenticatedUser))
+    <content tag="bodyClass">people</content>
+    <script type="text/javascript" language="JavaScript">
+        var contextPath = '$req.contextPath';
+    </script>
+    <div class="pagecontent people-directory">
+        #applyDecorator("root")
+            #decoratorParam("context" "global")
+            #decoratorParam("mode"  "userdir")
+            #decoratorParam("helper" $action.helper)
+
+            #*
+            #if ($showOnlyPersonal)
+                #set($title = $action.getText("people.show.personal"))
+                #set($personalActive = "active-tab")
+                #set($allActive = "")
+            #else
+                #set($title = $action.getText("people.show.all"))
+                #set($personalActive = "")
+                #set($allActive = "active-tab")
+            #end
+            *#
+                <div class="aui-page-panel">
+                    <div class="aui-page-panel-inner">
+                        #if (!$reports.empty)
+                        <div class="aui-page-panel-nav">
+                            <nav class="aui-navgroup aui-navgroup-vertical">
+                                <div class="aui-navgroup-inner">
+                                    <ul class="aui-nav">
+                                        #foreach($report in $reports)
+                                            <li #if ($action.report == $report.id) class="active-tab" #end>
+                                                <a href="${action.buildLinkFor($req, $report)}">$!{generalUtil.htmlEncode($localizationHelper.getTitleFor($report, $locale))}</a>
+                                            </li>
+                                        #end
+                                    </ul>
+                                </div>
+                            </nav>
+                        </div>
+                        #end
+
+                        <section class="aui-page-panel-content">
+                            <div class="greybox">
+                                <div class="greyboxfilled" id="people-search-title-bar">
+                                    #if($!action.effectiveReport != $!null)
+                                        <h2>$!{generalUtil.htmlEncode($localizationHelper.getTitleFor($action.effectiveReport, $locale))}</h2>
+                                        #parse ("/org/echocat/adam/convoyed/peopledirectory-searchform.vm")
+                                    #end
+                                </div>
+                                <div id="peoplelist">
+                                    #if ($profiles.size() > 0)
+                                        #if ($!action.effectiveView == "table")
+                                            <table class="profiles adam-profiles-table confluenceTable tablesorter">
+                                                <thead>
+                                                    <tr class="sortableHeader">
+                                                        #foreach($column in $columns)
+                                                            <th class="confluenceTh sortableHeader">$!{generalUtil.htmlEncode($localizationHelper.getTitleFor($column, $locale))}</th>
+                                                        #end
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    #set($rowMarker = "odd")
+                                                    #foreach ($profile in $profiles)
+                                                        <tr data-key="$!{generalUtil.escapeForHtmlAttribute($profile.name)}" class="${rowMarker}">
+                                                            #foreach($column in $columns)
+                                                                <td class="confluenceTd">
+                                                                    #if($columnRenderer.isRenderOfViewAllowedFor($column, $authenticatedUser, $profile))
+                                                                        #set($isLink = false)
+                                                                        #if ($column.link.name() == "profile")
+                                                                            #set($isLink = true)
+                                                                            <a href="$!{req.contextPath}/display/~${generalUtil.escapeForHtmlAttribute($profile.name)}">
+                                                                        #end
+                                                                        $!{columnRenderer.renderViewXhtml($column, $authenticatedUser, $profile)}
+                                                                        #if ($isLink)
+                                                                            </a>
+                                                                        #end
+                                                                    #end
+                                                                </td>
+                                                            #end
+                                                        </tr>
+                                                        #if ($rowMarker == "odd")
+                                                            #set($rowMarker = "even")
+                                                        #else
+                                                            #set($rowMarker = "odd")
+                                                        #end
+                                                    #end
+                                                </tbody>
+                                            </table>
+                                        #else
+                                            #foreach ($profile in $profiles)
+                                                $helper.renderConfluenceMacro("{profile:user=%s|mode=people-directory}", $profile.name)
+                                            #end
+                                            <br style="clear: left;">
+                                        #end
+                                        #set ($formAction = "${action.buildLinkFor($req)}&")
+                                        #pagination ($action.paginationSupport $formAction)
+                                    #else
+                                        #if ($action.fieldErrors.size() == 0)
+                                            $soyTemplateRendererHelper.getRenderedTemplateHtml("com.atlassian.auiplugin:aui-experimental-soy-templates", "aui.message.info.soy", {"content" : $i18n.getText("people.search.results.notfound").toString()})
+                                        #else
+                                            #fielderror("queryString")
+                                        #end
+                                    #end
+                                </div>
+
+                                #if ($showBlankExperience)
+                                    #blankExperience("people", $hasUserCreationPermission, "blank.experience.people", "blank.experience.people.no.invite.permission", "user.invite", "/admin/users/inviteuser.action?from=db-button", $docBean.getLink("help.invite.user"), "$req.contextPath/contactadministrators.action")
+                                #end
+                            </div>
+                        </section>
+                    </div>
+                </div>
+        #end
+    </div>
+</body>
+</html>

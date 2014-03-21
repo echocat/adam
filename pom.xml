@@ -1,0 +1,296 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  ~ **** BEGIN LICENSE BLOCK *****
+  ~
+  ~ echocat Adam, Copyright (c) 2014 echocat
+  ~
+  ~ This library is free software; you can redistribute it and/or
+  ~ modify it under the terms of the GNU Lesser General Public
+  ~ License as published by the Free Software Foundation; either
+  ~ version 3.0 of the License, or (at your option) any later version.
+  ~
+  ~ This library is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+  ~ Lesser General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Lesser General Public
+  ~ License along with this library.
+  ~
+  ~ **** END LICENSE BLOCK *****
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>org.echocat</groupId>
+    <artifactId>adam</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <name>echocat Adam</name>
+    <packaging>atlassian-plugin</packaging>
+
+    <description>Addon which enhances all user profiles of confluence. It also adds an advanced people directory. The whole addon is configurable by means of
+        an XML, can be localized, supports Velocity templates and supports view and edit restrictions.
+    </description>
+
+    <properties>
+        <version.org.echocat.jomon>1.4.3</version.org.echocat.jomon>
+        <version.org.javassist>3.18.1-GA</version.org.javassist>
+        <version.org.slf4j>1.7.5</version.org.slf4j>
+        <version.org.eclipse.persistence>2.5.1</version.org.eclipse.persistence>
+        <version.com.atlassian.confluence>5.3.4</version.com.atlassian.confluence>
+        <version.com.atlassian.confluence.data>5.3.4</version.com.atlassian.confluence.data>
+        <version.com.atlassian.maven.plugins.amps>4.2.10</version.com.atlassian.maven.plugins.amps>
+        <version.com.atlassian.plugins.testrunner>1.1.1</version.com.atlassian.plugins.testrunner>
+    </properties>
+
+    <organization>
+        <name>echocat</name>
+        <url>https://echocat.org/</url>
+    </organization>
+
+    <developers>
+        <developer>
+            <name>Gregor Noczinski</name>
+            <id>gregor.noczinski</id>
+            <email>gregor@noczinski.eu</email>
+        </developer>
+    </developers>
+
+    <licenses>
+        <license>
+            <name>GNU Lesser General Public License 3.0</name>
+            <url>https://www.gnu.org/licenses/lgpl-3.0.txt</url>
+        </license>
+    </licenses>
+
+    <dependencies>
+        <!-- Commons -->
+        <dependency>
+            <groupId>org.echocat.jomon</groupId>
+            <artifactId>runtime</artifactId>
+            <version>${version.org.echocat.jomon}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-api</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <!-- Bytecode modification -->
+        <dependency>
+            <groupId>org.javassist</groupId>
+            <artifactId>javassist</artifactId>
+            <version>${version.org.javassist}</version>
+        </dependency>
+
+        <!-- Logging -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>${version.org.slf4j}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- Confluence dependencies -->
+        <dependency>
+            <groupId>com.atlassian.confluence</groupId>
+            <artifactId>confluence</artifactId>
+            <version>${version.com.atlassian.confluence}</version>
+            <scope>provided</scope>
+            <exclusions>
+                <exclusion>
+                    <artifactId>connector</artifactId>
+                    <groupId>javax.resource</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.randombits.confluence</groupId>
+            <artifactId>confluence-conveyor</artifactId>
+            <version>1.0.1</version>
+            <scope>provided</scope>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>com.atlassian.templaterenderer</groupId>
+            <artifactId>atlassian-template-renderer-api</artifactId>
+            <version>1.1.1</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- JAXB -->
+        <dependency>
+            <groupId>org.eclipse.persistence</groupId>
+            <artifactId>org.eclipse.persistence.core</artifactId>
+            <version>${version.org.eclipse.persistence}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.persistence</groupId>
+            <artifactId>org.eclipse.persistence.moxy</artifactId>
+            <version>${version.org.eclipse.persistence}</version>
+        </dependency>
+
+        <!-- Testing -->
+        <dependency>
+            <groupId>org.echocat.jomon</groupId>
+            <artifactId>testing</artifactId>
+            <version>${version.org.echocat.jomon}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+            <version>${version.org.slf4j}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.atlassian.plugins</groupId>
+            <artifactId>atlassian-plugins-osgi-testrunner</artifactId>
+            <version>${version.com.atlassian.plugins.testrunner}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>javax.ws.rs</groupId>
+            <artifactId>jsr311-api</artifactId>
+            <version>1.1.1</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.2.2-atlassian-1</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>com.atlassian.maven.plugins</groupId>
+                <artifactId>maven-confluence-plugin</artifactId>
+                <version>${version.com.atlassian.maven.plugins.amps}</version>
+                <extensions>true</extensions>
+                <configuration>
+                    <productVersion>${version.com.atlassian.confluence}</productVersion>
+                    <productDataVersion>${version.com.atlassian.confluence.data}</productDataVersion>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>com.atlassian.maven.plugins</groupId>
+                <artifactId>maven-amps-dispatcher-plugin</artifactId>
+                <version>${version.com.atlassian.maven.plugins.amps}</version>
+            </plugin>
+            <plugin>
+                <groupId>com.atlassian.maven.plugins</groupId>
+                <artifactId>maven-amps-plugin</artifactId>
+                <version>${version.com.atlassian.maven.plugins.amps}</version>
+                <configuration>
+                    <jvmArgs>-Xms128m -Xmx2048m -XX:MaxPermSize=512m</jvmArgs>
+                    <jvmDebugPort>5005</jvmDebugPort>
+                    <httpPort>1990</httpPort>
+                    <product>confluence</product>
+                    <productVersion>${version.com.atlassian.confluence}</productVersion>
+                    <enableDevToolbox>true</enableDevToolbox>
+                    <allowGoogleTracking>false</allowGoogleTracking>
+                    <installPlugin>true</installPlugin>
+                    <instructions>
+                        <Import-Package>
+                            org.randombits.confluence.conveyor;version=*,
+                            org.randombits.confluence.conveyor.xwork;version=*,
+                            org.randombits.confluence.conveyor.condition;version=*
+                        </Import-Package>
+                        <Spring-Context>*;timeout:=60</Spring-Context>
+                        <CONF_COMM />
+                    </instructions>
+                </configuration>
+            </plugin>
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>2.3.2</version>
+                <configuration>
+                    <source>1.7</source>
+                    <target>1.7</target>
+                    <compilerArgument>-XDignore.symbol.file=true</compilerArgument>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+    <repositories>
+        <repository>
+            <id>atlassian-public</id>
+            <url>https://maven.atlassian.com/repository/public</url>
+            <snapshots>
+                <enabled>true</enabled>
+                <updatePolicy>never</updatePolicy>
+                <checksumPolicy>warn</checksumPolicy>
+            </snapshots>
+            <releases>
+                <enabled>true</enabled>
+                <checksumPolicy>warn</checksumPolicy>
+            </releases>
+        </repository>
+        <repository>
+            <id>echocat</id>
+            <url>http://repo.echocat.org/all</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
+
+    <pluginRepositories>
+        <pluginRepository>
+            <id>echocat</id>
+            <url>http://repo.echocat.org/all</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </pluginRepository>
+        <pluginRepository>
+            <id>atlassian-public</id>
+            <url>https://maven.atlassian.com/repository/public</url>
+            <releases>
+                <enabled>true</enabled>
+                <checksumPolicy>warn</checksumPolicy>
+            </releases>
+            <snapshots>
+                <updatePolicy>never</updatePolicy>
+                <checksumPolicy>warn</checksumPolicy>
+            </snapshots>
+        </pluginRepository>
+    </pluginRepositories>
+
+    <issueManagement>
+        <system>GitHub</system>
+        <url>https://github.com/echocat/adam/issues</url>
+    </issueManagement>
+
+    <distributionManagement>
+        <repository>
+            <id>echocat-adam-releases</id>
+            <url>dav:https://repo.echocat.org/adam-releases</url>
+        </repository>
+        <snapshotRepository>
+            <id>echocat-adam-snapshots</id>
+            <url>dav:https://repo.echocat.org/adam-snapshots</url>
+        </snapshotRepository>
+    </distributionManagement>
+
+    <scm>
+        <connection>scm:git:git@github.com:echocat/adam.git</connection>
+        <developerConnection>scm:git:git@github.com:echocat/adam.git</developerConnection>
+        <url>https://github.com/echocat/adam</url>
+        <tag>HEAD</tag>
+    </scm>
+
+</project>

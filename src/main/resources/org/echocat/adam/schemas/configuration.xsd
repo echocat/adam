@@ -1,0 +1,375 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+
+<!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  ~ **** BEGIN LICENSE BLOCK *****
+  ~
+  ~ echocat Adam, Copyright (c) 2014 echocat
+  ~
+  ~ This library is free software; you can redistribute it and/or
+  ~ modify it under the terms of the GNU Lesser General Public
+  ~ License as published by the Free Software Foundation; either
+  ~ version 3.0 of the License, or (at your option) any later version.
+  ~
+  ~ This library is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+  ~ Lesser General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Lesser General Public
+  ~ License along with this library.
+  ~
+  ~ **** END LICENSE BLOCK *****
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+
+<xsd:schema version="1.0"
+            targetNamespace="https://adam.echocat.org/schemas/configuration.xsd"
+            xmlns="https://adam.echocat.org/schemas/configuration.xsd"
+            xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            xmlns:jaxb="http://java.sun.com/xml/ns/jaxb"
+            jaxb:extensionBindingPrefixes="xjc"
+            jaxb:version="2.0"
+            elementFormDefault="qualified" attributeFormDefault="unqualified">
+
+    <xsd:element name="configuration" type="configuration" />
+
+    <xsd:complexType name="configuration">
+        <xsd:choice minOccurs="0" maxOccurs="unbounded">
+            <xsd:element name="profile" type="profile" />
+            <xsd:element name="report" type="report" />
+        </xsd:choice>
+        <xsd:attribute name="defaultReport" type="id" use="optional" default="all" />
+    </xsd:complexType>
+
+    <!-- Profile ========================================================================================================================================== -->
+
+    <xsd:complexType name="profile">
+        <xsd:choice minOccurs="0" maxOccurs="unbounded">
+            <xsd:element name="group" type="profileGroup" />
+        </xsd:choice>
+    </xsd:complexType>
+
+    <!-- ProfileGroup ===================================================================================================================================== -->
+
+    <xsd:complexType name="profileGroup">
+        <xsd:complexContent>
+            <xsd:extension base="idEnabled">
+                <xsd:choice minOccurs="0" maxOccurs="unbounded">
+                    <xsd:element name="localization" type="localization" minOccurs="0" maxOccurs="unbounded" />
+                    <xsd:element name="element" type="profileGroupElement" />
+                </xsd:choice>
+            </xsd:extension>
+        </xsd:complexContent>
+    </xsd:complexType>
+
+    <!-- ProfileGroupElement ============================================================================================================================== -->
+
+    <xsd:complexType name="profileGroupElement">
+        <xsd:complexContent>
+            <xsd:extension base="idEnabled">
+                <xsd:choice minOccurs="0" maxOccurs="unbounded">
+                    <xsd:element name="localization" type="localization" minOccurs="0" maxOccurs="unbounded" />
+                    <xsd:element name="access" type="accessViewEdit" minOccurs="0" maxOccurs="1" />
+                    <xsd:element name="contextAttribute" type="profileGroupElementContextAttribute" minOccurs="0" maxOccurs="unbounded" />
+                    <xsd:element name="template" type="template" minOccurs="0" maxOccurs="1" />
+                </xsd:choice>
+                <xsd:attribute name="type" type="profileGroupElementType" use="optional" default="singleLineText" />
+                <xsd:attribute name="searchable" type="xsd:boolean" use="optional" default="true" />
+                <xsd:attribute name="visibleIfEmpty" type="xsd:boolean" use="optional" default="false" />
+                <xsd:attribute name="defaultForReports" type="xsd:boolean" use="optional" default="false" />
+            </xsd:extension>
+        </xsd:complexContent>
+    </xsd:complexType>
+
+    <xsd:complexType name="profileGroupElementContextAttribute">
+        <xsd:complexContent>
+            <xsd:extension base="idEnabled" />
+        </xsd:complexContent>
+    </xsd:complexType>
+
+    <xsd:simpleType name="profileGroupElementType">
+        <xsd:annotation>
+            <xsd:appinfo>
+                <jaxb:javaType name="org.echocat.adam.profile.element.ElementModel.Type" />
+            </xsd:appinfo>
+        </xsd:annotation>
+
+        <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="singleLineText"/>
+            <xsd:enumeration value="multiLineText"/>
+            <xsd:enumeration value="emailAddress"/>
+            <xsd:enumeration value="url"/>
+            <xsd:enumeration value="phoneNumber"/>
+            <xsd:enumeration value="wikiMarkup"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <!-- Profile ========================================================================================================================================== -->
+
+    <xsd:complexType name="report">
+        <xsd:complexContent>
+            <xsd:extension base="idEnabled">
+                <xsd:choice minOccurs="0" maxOccurs="unbounded">
+                    <xsd:element name="localization" type="localization" minOccurs="0" maxOccurs="unbounded" />
+                    <xsd:element name="column" type="reportColumn" minOccurs="0" maxOccurs="unbounded" />
+                    <xsd:element name="filter" type="reportFilter" minOccurs="0" maxOccurs="1" />
+                    <xsd:element name="access" type="accessView" minOccurs="0" maxOccurs="1" />
+                </xsd:choice>
+                <xsd:attribute name="defaultView" type="reportView" use="optional" default="cards" />
+                <xsd:attribute name="resultsPerPage" type="xsd:positiveInteger" use="optional" default="50" />
+            </xsd:extension>
+        </xsd:complexContent>
+    </xsd:complexType>
+
+    <xsd:simpleType name="reportView">
+        <xsd:annotation>
+            <xsd:appinfo>
+                <jaxb:javaType name="org.echocat.adam.report.View" />
+            </xsd:appinfo>
+        </xsd:annotation>
+
+        <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="cards"/>
+            <xsd:enumeration value="table"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <!-- ReportColumn ===================================================================================================================================== -->
+
+    <xsd:complexType name="reportColumn">
+        <xsd:complexContent>
+            <xsd:extension base="idEnabled">
+                <xsd:choice minOccurs="0" maxOccurs="unbounded">
+                    <xsd:element name="localization" type="localization" minOccurs="0" maxOccurs="unbounded" />
+                    <xsd:element name="template" type="template" minOccurs="0" maxOccurs="1" />
+                    <xsd:element name="element" type="reportColumnElement" minOccurs="0" maxOccurs="unbounded" />
+                </xsd:choice>
+                <xsd:attribute name="link" type="reportColumnLink" use="optional" default="none" />
+            </xsd:extension>
+        </xsd:complexContent>
+    </xsd:complexType>
+
+    <xsd:simpleType name="reportColumnLink">
+        <xsd:annotation>
+            <xsd:appinfo>
+                <jaxb:javaType name="org.echocat.adam.report.Column.Link" />
+            </xsd:appinfo>
+        </xsd:annotation>
+
+        <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="none"/>
+            <xsd:enumeration value="profile"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:complexType name="reportColumnElement">
+        <xsd:complexContent>
+            <xsd:extension base="idEnabled">
+                <xsd:attribute name="format" type="reportColumnElementFormat" use="optional" default="formatted" />
+            </xsd:extension>
+        </xsd:complexContent>
+    </xsd:complexType>
+
+    <xsd:simpleType name="reportColumnElementFormat">
+        <xsd:annotation>
+            <xsd:appinfo>
+                <jaxb:javaType name="org.echocat.adam.report.Column.Link" />
+            </xsd:appinfo>
+        </xsd:annotation>
+
+        <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="plain"/>
+            <xsd:enumeration value="formatted"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <!-- ReportFilter ===================================================================================================================================== -->
+
+    <xsd:complexType name="reportFilter">
+        <xsd:choice minOccurs="0" maxOccurs="unbounded">
+            <xsd:element name="includingGroup" type="reportFilterGroup" minOccurs="0" maxOccurs="unbounded" />
+            <xsd:element name="excludingGroup" type="reportFilterGroup" minOccurs="0" maxOccurs="unbounded" />
+        </xsd:choice>
+    </xsd:complexType>
+
+    <xsd:complexType name="reportFilterGroup">
+        <xsd:complexContent>
+            <xsd:extension base="idEnabled" />
+        </xsd:complexContent>
+    </xsd:complexType>
+
+    <!-- Template ========================================================================================================================================= -->
+
+    <xsd:complexType name="template">
+        <xsd:simpleContent>
+            <xsd:extension base="xsd:string">
+                <xsd:attribute name="format" type="templateFormat" use="optional" default="velocity" />
+            </xsd:extension>
+        </xsd:simpleContent>
+    </xsd:complexType>
+
+    <xsd:simpleType name="templateFormat">
+        <xsd:annotation>
+            <xsd:appinfo>
+                <jaxb:javaType name="org.echocat.adam.template.TemplateFormat" />
+            </xsd:appinfo>
+        </xsd:annotation>
+
+        <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="velocity"/>
+            <xsd:enumeration value="plain"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <!-- Localization ===================================================================================================================================== -->
+
+    <xsd:complexType name="localization">
+        <xsd:attribute name="locale" type="locale" use="required" />
+        <xsd:attribute name="title" type="xsd:string" use="optional" />
+        <xsd:attribute name="helpText" type="xsd:string" use="optional" />
+    </xsd:complexType>
+
+    <xsd:simpleType name="locale">
+        <xsd:annotation>
+            <xsd:appinfo>
+                <jaxb:javaType name="java.util.Locale" />
+            </xsd:appinfo>
+        </xsd:annotation>
+
+        <xsd:restriction base="xsd:token">
+            <xsd:pattern value="[a-z]+(_[A-Z]+(_[A-Z]+)?)?" />
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <!-- ViewAccess =========================================================================================================================================== -->
+
+    <xsd:complexType name="accessView">
+        <xsd:choice minOccurs="0" maxOccurs="unbounded">
+            <xsd:element name="default" type="accessViewDefault" minOccurs="0" maxOccurs="1" />
+            <xsd:element name="administrator" type="accessViewAdministrator" minOccurs="0" maxOccurs="1" />
+            <xsd:element name="anonymous" type="accessViewAnonymous" minOccurs="0" maxOccurs="1" />
+            <xsd:element name="group" type="accessViewGroup" minOccurs="0" maxOccurs="unbounded" />
+        </xsd:choice>
+    </xsd:complexType>
+
+    <xsd:complexType name="accessViewDefault">
+        <xsd:complexContent>
+            <xsd:extension base="accessViewRule" />
+        </xsd:complexContent>
+    </xsd:complexType>
+
+    <xsd:complexType name="accessViewAdministrator">
+        <xsd:complexContent>
+            <xsd:extension base="accessViewRule" />
+        </xsd:complexContent>
+    </xsd:complexType>
+
+    <xsd:complexType name="accessViewAnonymous">
+        <xsd:complexContent>
+            <xsd:extension base="accessViewRule" />
+        </xsd:complexContent>
+    </xsd:complexType>
+
+    <xsd:complexType name="accessViewOwner">
+        <xsd:complexContent>
+            <xsd:extension base="accessViewRule" />
+        </xsd:complexContent>
+    </xsd:complexType>
+
+    <xsd:complexType name="accessViewGroup">
+        <xsd:complexContent>
+            <xsd:extension base="accessViewRule">
+                <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:extension>
+        </xsd:complexContent>
+    </xsd:complexType>
+
+    <xsd:complexType name="accessViewRule">
+        <xsd:attribute name="view" type="accessViewVisibility" use="required" />
+    </xsd:complexType>
+
+    <xsd:simpleType name="accessViewVisibility">
+        <xsd:annotation>
+            <xsd:appinfo>
+                <jaxb:javaType name="org.echocat.adam.access.ViewAccess.Visibility" />
+            </xsd:appinfo>
+        </xsd:annotation>
+
+        <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="allowed"/>
+            <xsd:enumeration value="masked"/>
+            <xsd:enumeration value="forbidden"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <!-- ViewEditAccess =========================================================================================================================================== -->
+
+    <xsd:complexType name="accessViewEdit">
+        <xsd:choice minOccurs="0" maxOccurs="unbounded">
+            <xsd:element name="default" type="accessViewEditDefault" minOccurs="0" maxOccurs="1" />
+            <xsd:element name="administrator" type="accessViewEditAdministrator" minOccurs="0" maxOccurs="1" />
+            <xsd:element name="anonymous" type="accessViewAnonymous" minOccurs="0" maxOccurs="1" />
+            <xsd:element name="owner" type="accessViewEditOwner" minOccurs="0" maxOccurs="1" />
+            <xsd:element name="group" type="accessViewGroup" minOccurs="0" maxOccurs="unbounded" />
+        </xsd:choice>
+    </xsd:complexType>
+
+    <xsd:complexType name="accessViewEditDefault">
+        <xsd:complexContent>
+            <xsd:extension base="accessViewEditRule" />
+        </xsd:complexContent>
+    </xsd:complexType>
+
+    <xsd:complexType name="accessViewEditAdministrator">
+        <xsd:complexContent>
+            <xsd:extension base="accessViewEditRule" />
+        </xsd:complexContent>
+    </xsd:complexType>
+
+    <xsd:complexType name="accessViewEditOwner">
+        <xsd:complexContent>
+            <xsd:extension base="accessViewEditRule" />
+        </xsd:complexContent>
+    </xsd:complexType>
+
+    <xsd:complexType name="accessViewEditRule">
+        <xsd:complexContent>
+            <xsd:extension base="accessViewRule">
+                <xsd:attribute name="edit" type="accessViewEditVisibility" use="required" />
+            </xsd:extension>
+        </xsd:complexContent>
+    </xsd:complexType>
+
+    <xsd:simpleType name="accessViewEditVisibility">
+        <xsd:annotation>
+            <xsd:appinfo>
+                <jaxb:javaType name="org.echocat.adam.access.ViewEditAccess.Editeditability" />
+            </xsd:appinfo>
+        </xsd:annotation>
+
+        <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="allowed"/>
+            <xsd:enumeration value="forbidden"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <!-- Id =============================================================================================================================================== -->
+
+    <xsd:complexType name="idEnabled">
+        <xsd:attribute name="id" type="id" use="required" />
+    </xsd:complexType>
+
+    <xsd:simpleType name="id">
+        <xsd:annotation>
+            <xsd:appinfo>
+                <jaxb:javaType name="java.lang.String" />
+            </xsd:appinfo>
+        </xsd:annotation>
+
+        <xsd:restriction base="xsd:token">
+            <xsd:pattern value="[a-zA-Z0-9_\-]+" />
+        </xsd:restriction>
+    </xsd:simpleType>
+
+
+</xsd:schema>
+

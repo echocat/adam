@@ -1,0 +1,75 @@
+/*****************************************************************************************
+ * *** BEGIN LICENSE BLOCK *****
+ *
+ * echocat Adam, Copyright (c) 2014 echocat
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 3.0 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library.
+ *
+ * *** END LICENSE BLOCK *****
+ ****************************************************************************************/
+
+div.adam-profile-body input[readonly],
+div.adam-profile-body textarea[readonly],
+form[name=editUser] input[readonly] {
+    background: #f5f5f5;
+    cursor: not-allowed;
+}
+
+.adam-profiles-table tr.even {
+    background: #f0f0f0;
+}
+
+.adam-profile-marco.profile-full {
+    width: 500px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    padding: 4px 4px 2px 4px;
+    border-radius: 3px;
+}
+
+.adam-profile-marco.profile-full .vcard {
+    float: left;
+    position: absolute;
+}
+
+.adam-profile-marco.profile-full .profile-group:not(:first-child) {
+    margin-top: 0.75em;
+}
+
+.adam-profile-marco.profile-full .field-group,
+.adam-profile-marco.profile-full .profile-group {
+    box-sizing: border-box;
+    padding: 0 0 2px 60px;
+    margin: 0;
+    clear: both;
+}
+
+.adam-profile-marco.profile-full .field-group label {
+    float: left;
+    position: absolute;
+    padding: 0;
+    margin: 0.3em 12px 0 -10px;
+    text-align: right;
+    width: 120px;
+    word-wrap: break-word;
+    font-size: 0.8em;
+    color: #707070;
+    font-weight: bold;
+}
+
+.adam-profile-marco.profile-full .field-group .field-value {
+    display: inline-block;
+    padding: 0;
+    margin-left: 118px;
+}

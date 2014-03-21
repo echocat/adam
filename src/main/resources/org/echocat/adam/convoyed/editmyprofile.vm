@@ -1,0 +1,44 @@
+<html>
+	<head>
+        <title>$generalUtil.htmlEncode($pageTitle)</title>
+        #requireResource("confluence.web.resources:aui-forms")
+        #requireResource("confluence.userstatus:userstatus-resources")
+	</head>
+
+    #applyDecorator("root")
+        #decoratorParam("context" "profile")
+        #decoratorParam("mode" "edit-profile-single")
+        #decoratorParam("helper" $action.helper)
+        #decoratorParam("infopanel-width" "200px")
+
+    <body>
+        #if($confirmPassOnEmailChange)
+            #requireResource("confluence.web.resources:edit-user-profile")
+            #parse("/users/password-dialog-templates.vm")
+        #end
+
+        <div class="page-item profile-info">
+
+            #parse ( "/template/includes/actionerrors.vm" )
+
+            #applyDecorator("form-aui")
+                #decoratorParam("formName" "editmyprofileform")
+                #decoratorParam("formId" "editmyprofileform")
+                #decoratorParam("submitAction"  "$req.contextPath/users/doeditmyprofile.action")
+                #decoratorParam("editAction" "$req.contextPath/users/editmyprofile.action")
+                #decoratorParam("editMode" "true")
+                #decoratorParam("method" "POST")
+                #form_xsrfToken()
+
+                #webPanelForLocation("atl.confluence.userprofile.edit" $action.context)
+
+                #parse ("/pages/includes/captcha-form-elements.vm")
+                #bodytag( "Submit" "theme='aui'" )
+                    #param ("submitValue" "$action.getText('save.name')")
+                #end ## bodytag
+
+            #end ## applyDecorator form-aui
+        </div>
+    </body>
+    #end ## applyDecorator root
+</html>

@@ -1,0 +1,87 @@
+<?xml version="1.0"?>
+
+<!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  ~ **** BEGIN LICENSE BLOCK *****
+  ~
+  ~ echocat Adam, Copyright (c) 2014 echocat
+  ~
+  ~ This library is free software; you can redistribute it and/or
+  ~ modify it under the terms of the GNU Lesser General Public
+  ~ License as published by the Free Software Foundation; either
+  ~ version 3.0 of the License, or (at your option) any later version.
+  ~
+  ~ This library is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+  ~ Lesser General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Lesser General Public
+  ~ License along with this library.
+  ~
+  ~ **** END LICENSE BLOCK *****
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+
+<conveyor-config>
+    <package-override name="users" extends="default" namespace="/users">
+        <default-interceptor-ref name="validatingStack"/>
+        <!--suppress DeprecatedClassUsageInspection -->
+        <action-override name="viewmyprofile" class="com.atlassian.confluence.user.actions.ViewMyProfileAction" method="doView" inherit="false">
+            <result name="success" type="velocity">/org/echocat/adam/convoyed/viewmyprofile.vm</result>
+        </action-override>
+        <action-override name="viewuserprofile" class="org.echocat.adam.profile.ExtendedViewUserProfileAction" inherit="false">
+            <result name="input" type="velocity">/org/echocat/adam/convoyed/viewmyprofile.vm</result>
+            <result name="success" type="velocity">/org/echocat/adam/convoyed/viewmyprofile.vm</result>
+            <result name="error" type="velocity">/org/echocat/adam/convoyed/viewmyprofile.vm</result>
+        </action-override>
+
+        <action-override name="editmyprofile" class="org.echocat.adam.profile.ExtendedEditMyProfileAction" method="doInput" inherit="false">
+            <result name="success" type="velocity">/org/echocat/adam/convoyed/editmyprofile.vm</result>
+            <result name="input" type="velocity">/org/echocat/adam/convoyed/editmyprofile.vm</result>
+        </action-override>
+        <action-override name="doeditmyprofile" class="org.echocat.adam.profile.ExtendedEditMyProfileAction" method="doEdit" inherit="false">
+            <result name="input" type="velocity">/org/echocat/adam/convoyed/editmyprofile.vm</result>
+            <result name="error" type="velocity">/org/echocat/adam/convoyed/editmyprofile.vm</result>
+            <result name="cancel" type="velocity">/org/echocat/adam/convoyed/editmyprofile.vm</result>
+            <result name="success" type="velocity">/org/echocat/adam/convoyed/editmyprofile.vm</result>
+        </action-override>
+    </package-override>
+
+    <package-override name="usermanagement" extends="default" namespace="/admin/users">
+        <default-interceptor-ref name="validatingStack"/>
+        <action-override name="edituser" class="org.echocat.adam.profile.ExtendedEditUserAction" inherit="false">
+            <result name="error" type="velocity">/org/echocat/adam/convoyed/edituser.vm</result>
+            <result name="input" type="velocity">/org/echocat/adam/convoyed/edituser.vm</result>
+            <result name="success" type="velocity">/org/echocat/adam/convoyed/edituser.vm</result>
+        </action-override>
+        <action-override name="doedituser" class="org.echocat.adam.profile.ExtendedEditUserAction" method="doEdit" inherit="false">
+            <param name="RequireSecurityToken">true</param>
+            <result name="error" type="velocity">/org/echocat/adam/convoyed/edituser.vm</result>
+            <result name="input" type="velocity">/org/echocat/adam/convoyed/edituser.vm</result>
+            <result name="cancel" type="redirect">viewuser.action?username=${@com.atlassian.confluence.util.GeneralUtil@doubleUrlEncode(username)}</result>
+            <result name="success" type="redirect">viewuser.action?username=${@com.atlassian.confluence.util.GeneralUtil@doubleUrlEncode(username)}</result>
+        </action-override>
+    </package-override>
+
+    <package-override name="default">
+        <default-interceptor-ref name="validatingStack"/>
+        <action-override name="peopledirectory" class="org.echocat.adam.profile.ExtendedPeopleDirectoryAction" inherit="false">
+            <interceptor-ref name="validatingStack"/>
+            <result name="oldsearch" type="redirect">/dopeopledirectorysearch.action?searchQueryBean.queryString=${oldSearchString}&amp;showOnlyPersonal=${showOnlyPersonal}&amp;startIndex=${oldStartIndex}</result>
+            <result name="browsepeople" type="redirect">/browsepeople.action?startIndex=${oldStartIndex}</result>
+        </action-override>
+
+        <action-override name="dopeopledirectorysearch" class="org.echocat.adam.profile.ExtendedPeopleDirectoryAction" method="doSearch" inherit="false">
+            <interceptor-ref name="validatingStack"/>
+            <result name="success" type="velocity">/org/echocat/adam/convoyed/peopledirectory-results.vm</result>
+            <result name="input" type="velocity">/org/echocat/adam/convoyed/peopledirectory-results.vm</result>
+            <result name="error" type="velocity">/dashboard/dashboard.vm</result>
+        </action-override>
+
+        <action-override name="browsepeople" class="org.echocat.adam.profile.ExtendedPeopleDirectoryAction" method="doBrowse" inherit="false">
+            <interceptor-ref name="validatingStack"/>
+            <result name="success" type="velocity">/org/echocat/adam/convoyed/peopledirectory-results.vm</result>
+            <result name="error" type="velocity">/dashboard/dashboard.vm</result>
+        </action-override>
+
+    </package-override>
+</conveyor-config>

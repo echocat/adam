@@ -1,0 +1,3 @@
+<component name="DependencyValidationManager">
+  <scope name="SourceCode" pattern="src:org.echocat.adam..*&amp;&amp;!src:org.echocat.adam.resources.codemirror..*||file:pom.xml||file:src/main/resources/atlassian-plugin.xml" />
+</component>

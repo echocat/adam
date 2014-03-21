@@ -1,0 +1,1 @@
+<input type="text" name="${elementModel.id}" id="${nodeId}" size="50" class="text" data-cip-id="${elementModel.id}"#if($readOnly) readonly#end value="$!{generalUtil.escapeForHtmlAttribute($value)}" />

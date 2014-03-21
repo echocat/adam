@@ -1,0 +1,38 @@
+#* @vtlvariable name="action" type="com.atlassian.confluence.user.actions.EditUserAction" *#
+<html>
+	<head>
+		<title>$action.getText("title.edit.user") #if ($action.user): $action.user.name #end</title>
+        #requireResource("confluence.web.resources:aui-forms")
+	</head>
+
+	<body>
+        #parse ( "/template/includes/actionerrors.vm" )
+
+       &laquo; <a href="viewuser.action?username=$!generalUtil.doubleUrlEncode($action.user.name)">$action.getText("return.to.view.user")</a><br/>
+            #if ($actionErrors.size() == 0)
+                #applyDecorator("form-aui")
+                    #decoratorParam("formName" "editUser")
+                    #decoratorParam("submitAction"  "doedituser.action?#url_xsrfToken()&userKey=$action.user.key")
+                    #decoratorParam("editMode" "true")
+
+                    #webPanelForLocation("atl.confluence.userprofile.edit" $action.context)
+
+                    #if ($action.canRename())
+                        <h2 class="profile-group">${i18n.getText("org.echocat.adam.general")}</h2>
+                        <fieldset>
+                            #bodytag( "TextField" "label='username.name'" "name='username'" "size='50'" "theme='aui'" )
+                                #param("required" "$action.getText('required.field')")
+                            #end
+                        </fieldset>
+                    #else
+                        #tag( "Hidden" "name='username'" "size='50'" "value='$!action.user.name'" )
+                    #end
+
+                    #tag( "Submit" "theme='aui'" )
+
+                #end ## applyDecorator form-aui
+            #end ## $actionErrors.size() == 0
+
+		#parse ( "/breadcrumbs.vm" )
+	</body>
+</html>

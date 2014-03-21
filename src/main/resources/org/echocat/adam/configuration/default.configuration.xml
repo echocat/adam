@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  ~ **** BEGIN LICENSE BLOCK *****
+  ~
+  ~ echocat Adam, Copyright (c) 2014 echocat
+  ~
+  ~ This library is free software; you can redistribute it and/or
+  ~ modify it under the terms of the GNU Lesser General Public
+  ~ License as published by the Free Software Foundation; either
+  ~ version 3.0 of the License, or (at your option) any later version.
+  ~
+  ~ This library is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+  ~ Lesser General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Lesser General Public
+  ~ License along with this library.
+  ~
+  ~ **** END LICENSE BLOCK *****
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+
+<!--
+This an example configuration for echocat Adam.
+It expects a remote LDAP directory of type ActiveDirectory.
+-->
+<configuration xmlns="https://adam.echocat.org/schemas/configuration.xsd" defaultReport="all">
+    <profile>
+        <group id="personal">
+            <element id="fullName" defaultForReports="true">
+                <access>
+                    <default view="allowed" edit="allowed" />
+                </access>
+            </element>
+            <element id="email" type="emailAddress" defaultForReports="true">
+                <access>
+                    <anonymous view="masked" />
+                    <default view="allowed" edit="allowed" />
+                </access>
+            </element>
+            <element id="mobile" type="phoneNumber" defaultForReports="true">
+                <localization locale="en_US" title="Mobile phone" />
+                <localization locale="de_DE" title="Handy" />
+                <contextAttribute id="mobile" />
+                <template>$!{mobile}</template>
+                <access>
+                    <anonymous view="masked" />
+                    <default view="allowed" edit="allowed" />
+                </access>
+            </element>
+            <element id="test">
+                <localization locale="en_US" title="Test" />
+            </element>
+            <element id="phone" type="phoneNumber" defaultForReports="true">
+                <contextAttribute id="telephoneNumber" />
+                <template>$!{telephoneNumber}</template>
+                <access>
+                    <owner view="allowed" edit="allowed" />
+                    <administrator view="allowed" edit="allowed" />
+                    <group name="can-see-telephone" view="allowed" />
+                    <default view="forbidden" edit="forbidden" />
+                </access>
+            </element>
+            <element id="website" type="url">
+                <contextAttribute id="wWWHomePage" />
+                <template>$!{wWWHomePage}</template>
+            </element>
+        </group>
+
+        <group id="business">
+            <element id="company" defaultForReports="true">
+                <localization locale="en_US" title="Company" />
+                <localization locale="de_DE" title="Firma" />
+                <contextAttribute id="company" />
+                <template>$!{company}</template>
+                <access>
+                    <anonymous view="forbidden" />
+                    <default view="allowed" edit="allowed" />
+                </access>
+            </element>
+            <element id="position" defaultForReports="true">
+                <contextAttribute id="title" />
+                <template>$!{title}</template>
+                <access>
+                    <anonymous view="forbidden" />
+                    <default view="allowed" edit="allowed" />
+                </access>
+            </element>
+            <element id="department" defaultForReports="true">
+                <contextAttribute id="department" />
+                <template>$!{department}</template>
+                <access>
+                    <anonymous view="forbidden" />
+                    <default view="allowed" edit="allowed" />
+                </access>
+            </element>
+            <element id="location" type="multiLineText">
+                <contextAttribute id="postalCode" /> <!-- postalCode -->
+                <contextAttribute id="streetAddress" /> <!-- street -->
+                <contextAttribute id="l" /> <!-- city -->
+                <contextAttribute id="st" /> <!-- state -->
+                <contextAttribute id="co" /> <!-- country -->
+                <template>$!{streetAddress}#if($!{streetAddress} != "" and ($!{postalCode} != "" or $!{l} != "" or $!st != "" or $!co != ""))${newLine}#end$!{null}$!{postalCode}#if($!{postalCode} != "" and ($!l != "" or $!st != "" or $!co != "")) #end$!{null}$!{l}#if($!{l} != "" and ($!st != "" or $!co != "")), #end$!{null}$!{st}#if($!st != "" and $!co !=""), #end$!{null}$!{co}</template>
+                <access>
+                    <anonymous view="forbidden" />
+                    <default view="allowed" edit="allowed" />
+                </access>
+            </element>
+        </group>
+    </profile>
+
+    <report id="all">
+        <localization locale="en_US" title="All users" />
+        <localization locale="de_DE" title="Alle Nutzer" />
+        <access>
+            <anonymous view="forbidden" />
+            <default view="allowed" />
+        </access>
+    </report>
+
+    <report id="employees" defaultView="table" resultsPerPage="500">
+        <localization locale="en_US" title="Employees" />
+        <localization locale="de_DE" title="Mitarbeiter" />
+        <filter>
+            <includingGroup id="employees" />
+        </filter>
+        <access>
+            <administrator view="allowed" />
+            <group name="employees" view="allowed" />
+            <default view="forbidden" />
+        </access>
+        <column id="name" link="profile">
+            <localization locale="en_US" title="Name" />
+            <localization locale="de_DE" title="Name" />
+            <element id="fullName" />
+            <template>$!{fullName}</template>
+        </column>
+        <column id="position" />
+        <column id="department" />
+        <column id="email" />
+        <column id="ext">
+            <localization locale="en_US" title="Ext" />
+            <localization locale="de_DE" title="Durchwahl" />
+            <element id="phone" format="plain" />
+            <template><![CDATA[#if($!phone.startsWith("+49 30 123456-"))<a href="tel:${generalUtil.htmlEncode($phone)}">$!{generalUtil.htmlEncode($phone.substring(14))}#end]]></template>
+        </column>
+        <column id="mobile" />
+    </report>
+
+</configuration>

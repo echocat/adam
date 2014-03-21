@@ -1,0 +1,10 @@
+#* @vtlvariable name="currentUser" type="com.atlassian.user.User" *#
+#* @vtlvariable name="profile" type="org.echocat.adam.profile.Profile" *#
+#* @vtlvariable name="elementModel" type="org.echocat.adam.profile.element.ElementModel" *#
+#if($!value != $!null)
+    #if($elementModel.access.checkView($currentUser, $profile).isMasked())
+        $!{elementRenderer.plainToXhtml($elementModel, $value)}
+    #else
+        <a class="field-value" id="${nodeId}" href="tel:${generalUtil.escapeForHtmlAttribute($value)}">$!{elementRenderer.plainToXhtml($elementModel, $value)}</a>
+    #end
+#end

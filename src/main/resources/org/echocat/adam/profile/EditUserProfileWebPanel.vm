@@ -1,0 +1,42 @@
+#* @vtlvariable name="groups" type="java.util.List<org.echocat.adam.profile.Group>" *#
+#* @vtlvariable name="groupRenderer" type="org.echocat.adam.profile.GroupRenderer" *#
+#requireResource("org.echocat.adam:userProfileResources")
+<div class="adam-profile-body">
+
+    #set($first = true)
+    #foreach($group in $groups)
+        #if ($groupRenderer.isRenderOfEditAllowedFor($group, $currentUser, $profile))
+            <h2 class="profile-group#if($first) first#end ">${localizationHelper.getTitleFor($group, $locale)}</h2>
+            #set($first = false)
+            <fieldset>
+                #foreach($elementModel in $group)
+                    #set($access = $elementModel.access)
+                    #if ($access.checkView($currentUser, $profile).isViewAllowed() or $access.checkEdit($currentUser, $profile).isEditAllowed())
+                        #set($title = $!localizationHelper.getTitleFor($elementModel, $locale))
+                        #set($helpText = $!localizationHelper.findHelpTextFor($elementModel, $locale))
+                        #set($nodeId = $!elementRenderer.nodeIdFor($elementModel, $profile))
+                        #if($elementModel.id == "email" and $elementRenderer.isRenderOfEidAllowedFor($elementModel, $currentUser, $profile))
+                            <input type="hidden" id="originalemail" value="$!{user.email}"/>
+                            <input type="hidden" id="passwordconfirmation" value="" name="passwordconfirmation"/>
+                        #end
+                        <div class="profile-element field-group editMode">
+                            <label id="labelFor-${nodeId}" for="${nodeId}">${elementRenderer.plainToXhtml($elementModel, $title)}
+                                #if(($elementModel.id == "fullName" or $elementModel.id == "email") and $elementRenderer.isRenderOfEidAllowedFor($elementModel, $currentUser, $profile))
+                                    <span class="aui-icon icon-required"></span>
+                                    <span class="content">$i18n.get("required.field")</span>
+                                #end
+                            </label>
+                            $!{elementRenderer.renderEditXhtml($elementModel, $currentUser, $profile)}
+                        </div>
+                        #if($!helpText != "")
+                            <div class="profile-element field-group editMode">
+                                <div class="hints"><span class="hints-text">${helpText}</span></div>
+                            </div>
+                        #end
+                    #end
+                #end
+            </fieldset>
+        #end
+    #end
+
+</div>
