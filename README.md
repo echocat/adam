@@ -18,6 +18,7 @@ You have several options:
 
 Links
 -----
+* [Marketplace listing](https://marketplace.atlassian.com/plugins/org.echocat.adam)
 * [Project page](https://github.com/echocat/adam)
 * [Issue tracker](https://github.com/echocat/adam/issues)
 * [Wiki](https://github.com/echocat/adam/wiki)
