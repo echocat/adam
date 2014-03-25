@@ -27,6 +27,7 @@ import org.echocat.adam.configuration.Configuration;
 import org.echocat.adam.configuration.ConfigurationMarshaller;
 import org.echocat.adam.configuration.ConfigurationMarshaller.ParseException;
 import org.echocat.adam.configuration.ConfigurationRepository;
+import org.echocat.adam.synchronization.LdapDirectorySynchronizer;
 
 import javax.annotation.Nonnull;
 
@@ -37,14 +38,18 @@ public class AdministrationAction extends ConfluenceActionSupport implements For
 
     @Nonnull
     private final ConfigurationRepository _configurationRepository;
+    @Nonnull
+    private final LdapDirectorySynchronizer _ldapDirectorySynchronizer;
 
     private String _configurationXml;
     private String _save;
+    private String _saveAndSynchronizationNow;
     private String _validate;
     private boolean _configurationValid;
 
-    public AdministrationAction(@Nonnull ConfigurationRepository configurationRepository) {
+    public AdministrationAction(@Nonnull ConfigurationRepository configurationRepository, @Nonnull LdapDirectorySynchronizer ldapDirectorySynchronizer) {
         _configurationRepository = configurationRepository;
+        _ldapDirectorySynchronizer = ldapDirectorySynchronizer;
     }
 
     @Override
@@ -58,7 +63,24 @@ public class AdministrationAction extends ConfluenceActionSupport implements For
         } else {
             result = doView();
         }
+        if (isSynchronizationRequested() && isEmpty(getActionErrors())) {
+            synchronize();
+        }
         return result;
+    }
+
+    protected void synchronize() throws Exception {
+        final Thread thread = new Thread("LDAP directory synchronization job") {
+            @Override
+            public void run() {
+                try {
+                    _ldapDirectorySynchronizer.synchronize();
+                } catch (final Exception e) {
+                    LOG.warn("Could not synchronize users.", e);
+                }
+            }
+        };
+        thread.start();
     }
 
     @Nonnull
@@ -119,7 +141,11 @@ public class AdministrationAction extends ConfluenceActionSupport implements For
     }
 
     public boolean isSaveRequested() {
-        return !isEmpty(getSave());
+        return !isEmpty(getSave()) || !isEmpty(getSaveAndSynchronizationNow());
+    }
+
+    public boolean isSynchronizationRequested() {
+        return !isEmpty(getSaveAndSynchronizationNow());
     }
 
     public boolean isValidationRequested() {
@@ -132,6 +158,14 @@ public class AdministrationAction extends ConfluenceActionSupport implements For
 
     public void setSave(String save) {
         _save = save;
+    }
+
+    public String getSaveAndSynchronizationNow() {
+        return _saveAndSynchronizationNow;
+    }
+
+    public void setSaveAndSynchronizationNow(String saveAndSynchronizationNow) {
+        _saveAndSynchronizationNow = saveAndSynchronizationNow;
     }
 
     public String getValidate() {

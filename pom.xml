@@ -26,7 +26,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.echocat</groupId>
     <artifactId>adam</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>0.1.1</version>
     <name>echocat Adam</name>
     <packaging>atlassian-plugin</packaging>
 
@@ -176,6 +176,9 @@
                 <configuration>
                     <productVersion>${version.com.atlassian.confluence}</productVersion>
                     <productDataVersion>${version.com.atlassian.confluence.data}</productDataVersion>
+                    <compressResources>false</compressResources>
+                    <compressCss>true</compressCss>
+                    <compressJs>true</compressJs>
                 </configuration>
             </plugin>
             <plugin>

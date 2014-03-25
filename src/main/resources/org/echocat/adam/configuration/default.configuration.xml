@@ -23,6 +23,8 @@
 <!--
 This an example configuration for echocat Adam.
 It expects a remote LDAP directory of type ActiveDirectory.
+
+See https://github.com/echocat/adam for documentation.
 -->
 <configuration xmlns="https://adam.echocat.org/schemas/configuration.xsd" defaultReport="all">
     <profile>
