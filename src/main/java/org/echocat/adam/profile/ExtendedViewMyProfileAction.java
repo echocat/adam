@@ -21,13 +21,13 @@
 
 package org.echocat.adam.profile;
 
-import com.atlassian.confluence.user.actions.ViewUserProfileAction;
+import com.atlassian.confluence.user.actions.ViewMyProfileAction;
 import com.atlassian.plugin.web.WebInterfaceManager;
 
 import static org.echocat.adam.extensions.ExtendedWebInterfaceManager.extendedWebInterfaceManager;
 
 @SuppressWarnings("deprecation")
-public class ExtendedViewUserProfileAction extends ViewUserProfileAction {
+public class ExtendedViewMyProfileAction extends ViewMyProfileAction {
 
     @Override
     public String execute() throws Exception {

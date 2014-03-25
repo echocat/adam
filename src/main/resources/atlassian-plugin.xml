@@ -79,6 +79,7 @@
     <component key="localizationHelper" name="Element model localization helper" class="org.echocat.adam.localization.LocalizationHelper"/>
     <component key="ldapDirectorySynchronizer" name="LDAP directory synchronizer" class="org.echocat.adam.synchronization.LdapDirectorySynchronizer" />
     <component key="userProfileMacroRenderer" name="User profile macro renderer" class="org.echocat.adam.profile.ViewMyUserProfileWebPanel"  />
+    <component key="extendedWebInterfaceManager" name="Extended web interface manager" class="org.echocat.adam.extensions.ExtendedWebInterfaceManager" interface="com.atlassian.plugin.web.WebInterfaceManager" public="true" />
 
     <!-- =================================================================================================================== -->
 
@@ -110,7 +111,7 @@
         </parameters>
     </xhtml-macro>
 
-    <web-panel key="viewMyUserProfileWebPanel" name="View my user profile WebPanel" location="atl.confluence.userprofile.info.advanced" weight="100" class="org.echocat.adam.profile.ViewMyUserProfileWebPanel" />
+    <web-panel key="viewMyUserProfileWebPanel" name="View my user profile WebPanel" location="atl.confluence.userprofile.info" weight="100" class="org.echocat.adam.profile.ViewMyUserProfileWebPanel" />
     <web-panel key="editUserProfileWebPanel" name="Edit user profile WebPanel" location="atl.confluence.userprofile.edit" weight="100" class="org.echocat.adam.profile.EditUserProfileWebPanel" />
 
     <!-- =================================================================================================================== -->

@@ -24,14 +24,13 @@
 <conveyor-config>
     <package-override name="users" extends="default" namespace="/users">
         <default-interceptor-ref name="validatingStack"/>
-        <!--suppress DeprecatedClassUsageInspection -->
-        <action-override name="viewmyprofile" class="com.atlassian.confluence.user.actions.ViewMyProfileAction" method="doView" inherit="false">
-            <result name="success" type="velocity">/org/echocat/adam/convoyed/viewmyprofile.vm</result>
+        <action-override name="viewmyprofile" class="org.echocat.adam.profile.ExtendedViewMyProfileAction" method="doView" inherit="false">
+            <result name="success" type="velocity">/users/viewmyprofile.vm</result>
         </action-override>
         <action-override name="viewuserprofile" class="org.echocat.adam.profile.ExtendedViewUserProfileAction" inherit="false">
-            <result name="input" type="velocity">/org/echocat/adam/convoyed/viewmyprofile.vm</result>
-            <result name="success" type="velocity">/org/echocat/adam/convoyed/viewmyprofile.vm</result>
-            <result name="error" type="velocity">/org/echocat/adam/convoyed/viewmyprofile.vm</result>
+            <result name="input" type="velocity">/users/viewmyprofile.vm</result>
+            <result name="success" type="velocity">/users/viewmyprofile.vm</result>
+            <result name="error" type="velocity">/users/viewmyprofile.vm</result>
         </action-override>
 
         <action-override name="editmyprofile" class="org.echocat.adam.profile.ExtendedEditMyProfileAction" method="doInput" inherit="false">
