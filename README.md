@@ -16,6 +16,14 @@ You have several options:
 1. You can install it direct over the addon manager of confluence.
 2. You can download it from [Marketplace](https://marketplace.atlassian.com/plugins/org.echocat.adam) and install it manually.
 
+Configuration
+-------------
+
+1. Go to ``<you base confluence url>/plugins/org.echocat.adam/administration.action``. Example ``http://wiki.foobar.com/plugins/org.echocat.adam/administration.action``
+2. Edit the configuration XML.
+
+Sorry for now there is no documentation about the configuration XML and it could be changed because this is currently a beta. But you could refer the [Schema XSD](https://raw.githubusercontent.com/echocat/adam/master/src/main/resources/org/echocat/adam/schemas/configuration.xsd). The configuration will be validated against it before save. If there is an error you will notified about the problem and the line where the problem is located.
+
 Links
 -----
 * [Marketplace listing](https://marketplace.atlassian.com/plugins/org.echocat.adam)
