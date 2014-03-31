@@ -192,9 +192,7 @@
     </xsd:complexType>
 
     <xsd:complexType name="reportFilterGroup">
-        <xsd:complexContent>
-            <xsd:extension base="idEnabled" />
-        </xsd:complexContent>
+        <xsd:attribute name="id" type="xsd:string" use="required" />
     </xsd:complexType>
 
     <!-- Template ========================================================================================================================================= -->
