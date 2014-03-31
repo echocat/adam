@@ -28,6 +28,8 @@ import org.echocat.adam.configuration.ConfigurationMarshaller;
 import org.echocat.adam.configuration.ConfigurationMarshaller.ParseException;
 import org.echocat.adam.configuration.ConfigurationRepository;
 import org.echocat.adam.synchronization.LdapDirectorySynchronizer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.annotation.Nonnull;
 
@@ -35,6 +37,8 @@ import static org.apache.commons.lang3.StringUtils.isEmpty;
 import static org.echocat.jomon.runtime.CollectionUtils.isEmpty;
 
 public class AdministrationAction extends ConfluenceActionSupport implements FormAware {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(AdministrationAction.class);
 
     @Nonnull
     private final ConfigurationRepository _configurationRepository;
@@ -76,7 +80,7 @@ public class AdministrationAction extends ConfluenceActionSupport implements For
                 try {
                     _ldapDirectorySynchronizer.synchronize();
                 } catch (final Exception e) {
-                    LOG.warn("Could not synchronize users.", e);
+                    LOGGER.warn("Could not synchronize users.", e);
                 }
             }
         };
