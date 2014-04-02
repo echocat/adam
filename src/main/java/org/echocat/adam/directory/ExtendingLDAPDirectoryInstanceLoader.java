@@ -28,35 +28,19 @@ import com.atlassian.crowd.directory.RemoteDirectory;
 import com.atlassian.crowd.directory.loader.LDAPDirectoryInstanceLoader;
 import com.atlassian.crowd.embedded.api.Directory;
 import com.atlassian.crowd.util.InstanceFactory;
-import org.springframework.beans.factory.DisposableBean;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.lang.reflect.Field;
-import java.util.HashMap;
 import java.util.Map;
 
-import static com.atlassian.spring.container.ContainerManager.getComponent;
-
-public class ExtendingLDAPDirectoryInstanceLoader implements LDAPDirectoryInstanceLoader, DisposableBean {
+public class ExtendingLDAPDirectoryInstanceLoader implements LDAPDirectoryInstanceLoader {
 
     @Nonnull
-    private final RemoteDirectoryExtender _extender = new RemoteDirectoryExtender();
-    @Nonnull
-    private final Map<String, Class<? extends RemoteDirectory>> _inputToExtendedClass = new HashMap<>();
-    @Nonnull
-    private final InstanceFactory _instanceFactory;
-    @Nonnull
-    private final ConfluenceListableBeanFactory _beanFactory;
+    private final RemoteDirectoryExtender _extender;
 
-    public ExtendingLDAPDirectoryInstanceLoader(@Nonnull DirectoryHelper directoryHelper) {
-        this((InstanceFactory) getComponent("instanceFactory"), directoryHelper);
-    }
-
-    public ExtendingLDAPDirectoryInstanceLoader(@Nonnull InstanceFactory instanceFactory, @Nonnull DirectoryHelper directoryHelper) {
-        _instanceFactory = instanceFactory;
-        _beanFactory = getBeanFactoryOf(instanceFactory);
-        _beanFactory.registerSingleton("directoryHelper", directoryHelper);
+    public ExtendingLDAPDirectoryInstanceLoader(@Nonnull RemoteDirectoryExtender extender) {
+        _extender = extender;
     }
 
     @Nonnull
@@ -86,8 +70,7 @@ public class ExtendingLDAPDirectoryInstanceLoader implements LDAPDirectoryInstan
     @Nonnull
     protected RemoteDirectory newRemoteDirectory(@Nullable Long directoryId, @Nonnull String className, @Nullable Map<String, String> attributes) {
         try {
-            final Class<? extends RemoteDirectory> clazz = getRemoteDirectoryFor(className, getClass().getClassLoader());
-            final RemoteDirectory remoteDirectory = (RemoteDirectory) _instanceFactory.getInstance(clazz.getName(), clazz.getClassLoader());
+            final RemoteDirectory remoteDirectory = _extender.createInstance(className, RemoteDirectory.class, getClass().getClassLoader());
             if (directoryId != null) {
                 remoteDirectory.setDirectoryId(directoryId);
             }
@@ -100,53 +83,21 @@ public class ExtendingLDAPDirectoryInstanceLoader implements LDAPDirectoryInstan
 
     @Override
     public boolean canLoad(String className) {
+        boolean result;
         try {
-            return findRemoteDirectoryFor(className, getClass().getClassLoader()) != null;
+            getRemoteDirectoryFor(className, getClass().getClassLoader());
+            result = true;
+        } catch (final IllegalArgumentException ignored) {
+            result = false;
         } catch (final Exception e) {
             throw new RuntimeException("Could not check if " + className + " is loadable.", e);
         }
-    }
-
-    @Nullable
-    protected Class<? extends RemoteDirectory> findRemoteDirectoryFor(@Nonnull String className, @Nonnull ClassLoader classLoader) throws Exception {
-        return getRemoteDirectoryFor(className, classLoader, true);
+        return result;
     }
 
     @Nonnull
     protected Class<? extends RemoteDirectory> getRemoteDirectoryFor(@Nonnull String className, @Nonnull ClassLoader classLoader) throws Exception {
         // noinspection ConstantConditions
-        return getRemoteDirectoryFor(className, classLoader, false);
-    }
-
-    @SuppressWarnings("DuplicateThrows")
-    @Nullable
-    protected Class<? extends RemoteDirectory> getRemoteDirectoryFor(@Nonnull String className, @Nonnull ClassLoader classLoader, boolean canBeNull) throws Exception, IllegalArgumentException {
-        synchronized (_inputToExtendedClass) {
-            Class<? extends RemoteDirectory> result;
-            if (_inputToExtendedClass.containsKey(className)) {
-                result = _inputToExtendedClass.get(className);
-            } else {
-                try {
-                    result = _extender.extend(className, RemoteDirectory.class, classLoader);
-                    _inputToExtendedClass.put(className, result);
-                } catch (final IllegalArgumentException e) {
-                    _inputToExtendedClass.put(className, null);
-                    if (canBeNull) {
-                        result = null;
-                    } else {
-                        throw e;
-                    }
-                }
-            }
-            if (result == null && !canBeNull) {
-                throw new IllegalArgumentException("Could not extend " + className + ".");
-            }
-            return result;
-        }
-    }
-
-    @Override
-    public void destroy() throws Exception {
-        _beanFactory.destroySingleton("directoryHelper");
+        return _extender.extend(className, RemoteDirectory.class, classLoader);
     }
 }

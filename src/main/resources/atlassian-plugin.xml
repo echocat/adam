@@ -71,6 +71,7 @@
     <component key="elementModelProvider" name="Element model provider" class="org.echocat.adam.profile.element.ElementModelProvider" />
     <component key="reportProvider" name="Report provider" class="org.echocat.adam.report.ReportProvider" />
 
+    <component key="remoteDirectoryExtender" name="Remote directory extender" class="org.echocat.adam.directory.RemoteDirectoryExtender"/>
     <component key="extendingLDAPDirectoryInstanceLoader" name="Extending LDAP directory instance loader" class="org.echocat.adam.directory.ExtendingLDAPDirectoryInstanceLoader"/>
     <component key="directoryHelper" name="Directory helper" class="org.echocat.adam.directory.DirectoryHelper"/>
     <component key="elementRenderer" name="Element renderer" class="org.echocat.adam.profile.element.ElementRenderer" />

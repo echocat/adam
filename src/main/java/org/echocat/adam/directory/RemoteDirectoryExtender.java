@@ -21,36 +21,67 @@
 
 package org.echocat.adam.directory;
 
+import com.atlassian.crowd.directory.RemoteDirectory;
 import javassist.*;
 import org.echocat.jomon.runtime.util.SerialGenerator;
 import org.echocat.jomon.runtime.util.SimpleLongSerialGenerator;
 
 import javax.annotation.Nonnull;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class RemoteDirectoryExtender {
 
+    protected static final CtClass[] NO_CLASSES = new CtClass[0];
     protected static final String REFERENCE_FIELD_NAME = "_reference";
-    public static final CtClass[] NO_CLASSES = new CtClass[0];
 
+    @Nonnull
+    private final Map<String, Class<? extends RemoteDirectory>> _inputToExtendedClass = new HashMap<>();
     @Nonnull
     private final SerialGenerator<Long> _serialGenerator = new SimpleLongSerialGenerator().withInitialValue(1);
     @Nonnull
     private final ClassPool _parentClassPool = ClassPool.getDefault();
-
     @Nonnull
-    public <T> Class<? extends T> extend(@Nonnull Class<T> superClass) throws Exception {
-        return extend(superClass.getName(), superClass, superClass.getClassLoader());
+    private final RemoteDirectorySpringInitiatorFacade _facade;
+
+    public RemoteDirectoryExtender(@Nonnull DirectoryHelper directoryHelper) throws Exception {
+        _facade = new RemoteDirectorySpringInitiatorFacade(directoryHelper);
     }
 
     @Nonnull
-    public Class<?> extend(@Nonnull String originalClassName, @Nonnull ClassLoader classLoader) throws Exception {
-        return extend(originalClassName, Object.class, classLoader);
+    public <T extends RemoteDirectory> T createInstance(@Nonnull String originalClassName, @Nonnull Class<T> baseClass, @Nonnull ClassLoader classLoader) throws Exception {
+        final Class<? extends T> newDirectoryType = extend(originalClassName, baseClass, classLoader);
+        // noinspection unchecked
+        return _facade.createInstance((Class<? extends RemoteDirectory>) classLoader.loadClass(originalClassName), newDirectoryType);
     }
 
     @Nonnull
-    public <T> Class<? extends T> extend(@Nonnull String originalClassName, @Nonnull Class<T> baseClass, @Nonnull ClassLoader classLoader) throws Exception {
+    public <T extends RemoteDirectory> Class<? extends T> extend(@Nonnull String originalClassName, @Nonnull Class<T> baseClass, @Nonnull ClassLoader classLoader) throws Exception {
+        synchronized (_inputToExtendedClass) {
+            final Class<? extends T> result;
+            if (_inputToExtendedClass.containsKey(originalClassName)) {
+                //noinspection unchecked
+                result = (Class<? extends T>) _inputToExtendedClass.get(originalClassName);
+            } else {
+                try {
+                    result = extendInternal(originalClassName, baseClass, classLoader);
+                    _inputToExtendedClass.put(originalClassName, result);
+                } catch (final IllegalArgumentException e) {
+                    _inputToExtendedClass.put(originalClassName, null);
+                    throw e;
+                }
+            }
+            if (result == null) {
+                throw new IllegalArgumentException("Could not extend " + originalClassName + ".");
+            }
+            return result;
+        }
+    }
+
+    @Nonnull
+    protected  <T extends RemoteDirectory> Class<? extends T> extendInternal(@Nonnull String originalClassName, @Nonnull Class<T> baseClass, @Nonnull ClassLoader classLoader) throws Exception {
         final ClassPool pool = new ClassPool(_parentClassPool);
         pool.insertClassPath(new LoaderClassPath(classLoader));
         pool.insertClassPath(new LoaderClassPath(baseClass.getClassLoader()));
@@ -145,7 +176,6 @@ public class RemoteDirectoryExtender {
                 + "return " + REFERENCE_FIELD_NAME + ".extendAttributeMappers(super.getCustomUserAttributeMappers($$));"
                 + "}";
     }
-
 
     protected class ClassLoaderImpl extends ClassLoader {
 
