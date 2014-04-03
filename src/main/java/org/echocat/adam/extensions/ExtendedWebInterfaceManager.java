@@ -22,6 +22,7 @@
 package org.echocat.adam.extensions;
 
 import com.atlassian.confluence.plugin.descriptor.web.ConfluenceWebInterfaceManager;
+import com.atlassian.confluence.plugin.descriptor.web.WebInterfaceContext;
 import com.atlassian.plugin.web.WebFragmentHelper;
 import com.atlassian.plugin.web.WebInterfaceManager;
 import com.atlassian.plugin.web.descriptors.DefaultWebPanelModuleDescriptor;
@@ -67,11 +68,11 @@ public class ExtendedWebInterfaceManager implements WebInterfaceManager, Applica
          return result;
     }
 
+    private ApplicationContext _applicationContext;
+
     public ExtendedWebInterfaceManager() {
         c_instance = this;
     }
-
-    private ApplicationContext _applicationContext;
 
     @Override
     public boolean hasSectionsForLocation(String s) {return getOriginal().hasSectionsForLocation(s);}
@@ -80,16 +81,50 @@ public class ExtendedWebInterfaceManager implements WebInterfaceManager, Applica
     public List<WebSectionModuleDescriptor> getSections(String s) {return getOriginal().getSections(s);}
 
     @Override
-    public List<WebSectionModuleDescriptor> getDisplayableSections(String s, Map<String, Object> stringObjectMap) {return getOriginal().getDisplayableSections(s, stringObjectMap);}
+    public List<WebSectionModuleDescriptor> getDisplayableSections(String s, Map<String, Object> stringObjectMap) {
+        return getOriginal().getDisplayableSections(s, stringObjectMap);
+    }
+
+    public List<WebSectionModuleDescriptor> getDisplayableSections(String s, WebInterfaceContext context) {
+        return getDisplayableSections(s, context.toMap());
+    }
 
     @Override
     public List<WebItemModuleDescriptor> getItems(String s) {return getOriginal().getItems(s);}
 
     @Override
-    public List<WebItemModuleDescriptor> getDisplayableItems(String s, Map<String, Object> stringObjectMap) {return getOriginal().getDisplayableItems(s, stringObjectMap);}
+    public List<WebItemModuleDescriptor> getDisplayableItems(String s, Map<String, Object> stringObjectMap) {
+        return getOriginal().getDisplayableItems(s, stringObjectMap);
+    }
+
+    public List<WebItemModuleDescriptor> getDisplayableItems(String key, WebInterfaceContext context) {
+        return getDisplayableItems(key, context.toMap());
+    }
 
     @Override
     public List<WebPanel> getWebPanels(String s) {return getOriginal().getWebPanels(s);}
+
+    @Override
+    public List<WebPanelModuleDescriptor> getWebPanelDescriptors(String s) {return getOriginal().getWebPanelDescriptors(s);}
+
+    @Override
+    public List<WebPanelModuleDescriptor> getDisplayableWebPanelDescriptors(String s, Map<String, Object> stringObjectMap) {
+        return getOriginal().getDisplayableWebPanelDescriptors(s, stringObjectMap);
+    }
+
+    public List<WebPanelModuleDescriptor> getDisplayableWebPanelDescriptors(String s, WebInterfaceContext context) {
+        return getDisplayableWebPanelDescriptors(s, context.toMap());
+    }
+
+    @Override
+    public void refresh() {getOriginal().refresh();}
+
+    @Override
+    public WebFragmentHelper getWebFragmentHelper() {return getOriginal().getWebFragmentHelper();}
+
+    public List<WebPanel> getDisplayableWebPanels(String location, WebInterfaceContext context) {
+        return getDisplayableWebPanels(location, context.toMap());
+    }
 
     @Override
     public List<WebPanel> getDisplayableWebPanels(String location, Map<String, Object> context) {
@@ -142,18 +177,6 @@ public class ExtendedWebInterfaceManager implements WebInterfaceManager, Applica
             throw new RuntimeException("Could not access " + RESOURCE_FILENAME_FIELD + " of " + panel + ".", e);
         }
     }
-
-    @Override
-    public List<WebPanelModuleDescriptor> getWebPanelDescriptors(String s) {return getOriginal().getWebPanelDescriptors(s);}
-
-    @Override
-    public List<WebPanelModuleDescriptor> getDisplayableWebPanelDescriptors(String s, Map<String, Object> stringObjectMap) {return getOriginal().getDisplayableWebPanelDescriptors(s, stringObjectMap);}
-
-    @Override
-    public void refresh() {getOriginal().refresh();}
-
-    @Override
-    public WebFragmentHelper getWebFragmentHelper() {return getOriginal().getWebFragmentHelper();}
 
     @Nonnull
     protected WebInterfaceManager getOriginal() {
