@@ -21,7 +21,6 @@
 
 package org.echocat.adam.profile;
 
-import com.atlassian.confluence.user.AuthenticatedUserThreadLocal;
 import com.atlassian.confluence.user.ConfluenceUser;
 import com.atlassian.confluence.user.actions.EditMyProfileAction;
 import org.echocat.adam.profile.element.ElementModel;
@@ -32,6 +31,9 @@ import java.util.Map;
 import static org.apache.commons.lang3.StringUtils.join;
 import static org.echocat.adam.profile.ProfileModelProvider.profileModelProvider;
 import static org.echocat.adam.profile.ProfileProvider.profileProvider;
+import static org.echocat.adam.profile.element.ElementModel.EMAIL_ELEMENT_ID;
+import static org.echocat.adam.profile.element.ElementModel.FULL_NAME_ELEMENT_ID;
+import static org.echocat.adam.profile.element.ElementModel.USER_NAME_ELEMENT_ID;
 
 @SuppressWarnings("deprecation")
 public class ExtendedEditMyProfileAction extends EditMyProfileAction {
@@ -53,11 +55,11 @@ public class ExtendedEditMyProfileAction extends EditMyProfileAction {
     private void updateFields(@Nonnull Profile profile) {
         for (final Group group : profileModelProvider().get()) {
             for (final ElementModel elementModel : group) {
-                if (!elementModel.isStandard()) {
-                    final String id = elementModel.getId();
+                final String id = elementModel.getId();
+                if (!id.equals(FULL_NAME_ELEMENT_ID) && !id.equals(EMAIL_ELEMENT_ID) && !id.equals(USER_NAME_ELEMENT_ID)) {
                     final String[] plainValues = _parameters.get(id);
                     final String plainValue = plainValues != null && plainValues.length > 0 ? join(plainValues, ' ') : null;
-                    if (plainValue != null && elementModel.getAccess().checkEdit(AuthenticatedUserThreadLocal.get(), profile).isEditAllowed()) {
+                    if (plainValue != null && elementModel.getAccess().checkEdit(getAuthenticatedUser(), profile).isEditAllowed()) {
                         profile.setValue(elementModel, plainValue);
                     }
                 }

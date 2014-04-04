@@ -32,6 +32,7 @@ import java.util.Map;
 import static org.apache.commons.lang3.StringUtils.join;
 import static org.echocat.adam.profile.ProfileModelProvider.profileModelProvider;
 import static org.echocat.adam.profile.ProfileProvider.profileProvider;
+import static org.echocat.adam.profile.element.ElementModel.*;
 
 public class ExtendedEditUserAction extends EditUserAction {
 
@@ -53,8 +54,8 @@ public class ExtendedEditUserAction extends EditUserAction {
     private void updateFields(@Nonnull Profile profile) {
         for (final Group group : profileModelProvider().get()) {
             for (final ElementModel elementModel : group) {
-                if (!elementModel.isStandard()) {
-                    final String id = elementModel.getId();
+                final String id = elementModel.getId();
+                if (!id.equals(FULL_NAME_ELEMENT_ID) && !id.equals(EMAIL_ELEMENT_ID) && !id.equals(USER_NAME_ELEMENT_ID)) {
                     final String[] plainValues = _parameters.get(id);
                     final String plainValue = plainValues != null && plainValues.length > 0 ? join(plainValues, ' ') : null;
                     if (plainValue != null && elementModel.getAccess().checkEdit(AuthenticatedUserThreadLocal.get(), profile).isEditAllowed()) {

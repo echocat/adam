@@ -36,6 +36,8 @@ public interface ElementModel extends Localized {
     @Nonnull
     public static final String FULL_NAME_ELEMENT_ID = "fullName";
     @Nonnull
+    public static final String USER_NAME_ELEMENT_ID = "username";
+    @Nonnull
     public static final String EMAIL_ELEMENT_ID = "email";
     @Nonnull
     public static final String WEBSITE_ELEMENT_ID = "website";
