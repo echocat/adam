@@ -1,0 +1,1 @@
+<textarea name="${elementModel.id}" id="${nodeId}" cols="70" rows="8" class="monospaceInput textarea" data-cip-id="${elementModel.id}"#if($readOnly) readonly#end>$!{generalUtil.htmlEncode($value)}</textarea>

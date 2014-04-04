@@ -28,7 +28,6 @@ import com.atlassian.renderer.RenderContext;
 import com.atlassian.renderer.WikiStyleRenderer;
 import com.atlassian.user.User;
 import org.echocat.adam.profile.Profile;
-import org.echocat.adam.profile.element.ElementModelProvider.DefaultStandardElement;
 import org.echocat.adam.template.Template;
 import org.echocat.adam.template.TemplateFormat;
 import org.springframework.beans.factory.DisposableBean;
@@ -190,6 +189,12 @@ public class ElementRenderer implements DisposableBean {
             result = result.replace("\n", "<br/>\n");
         }
         return result;
+    }
+
+    @Nonnull
+    @HtmlSafe
+    public String getAsString(@SuppressWarnings("UnusedParameters") @Nonnull ElementModel mode, @Nullable Object input) {
+        return input != null ? input.toString() : "";
     }
 
     @Nullable

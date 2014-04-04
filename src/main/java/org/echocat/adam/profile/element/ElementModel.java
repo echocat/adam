@@ -70,7 +70,8 @@ public interface ElementModel extends Localized {
         emailAddress,
         url,
         phoneNumber,
-        wikiMarkup
+        wikiMarkup,
+        html
     }
 
 }

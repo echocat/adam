@@ -100,6 +100,7 @@
             <xsd:enumeration value="url"/>
             <xsd:enumeration value="phoneNumber"/>
             <xsd:enumeration value="wikiMarkup"/>
+            <xsd:enumeration value="html"/>
         </xsd:restriction>
     </xsd:simpleType>
 

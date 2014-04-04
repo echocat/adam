@@ -1,0 +1,3 @@
+#if($!value != $!null)
+    <span class="field-value" id="${nodeId}">$!{elementRenderer.getAsString($elementModel, $value)}</span>
+#end
