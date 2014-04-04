@@ -80,10 +80,8 @@ public class Profile implements User {
             // TODO!
         } else if (ElementModel.PERSONAL_INFORMATION_ELEMENT_ID.equals(id)) {
             setPersonalInformationBody(to);
-        } else if (of.isStandard()) {
-            setStandardValue(of, to);
         } else {
-            setCustomValue(of, to);
+            setStandardValue(of, to);
         }
     }
 
@@ -97,10 +95,8 @@ public class Profile implements User {
             result = getEmail();
         } else if (ElementModel.PERSONAL_INFORMATION_ELEMENT_ID.equals(of.getId())) {
             result = getPersonalInformationBody();
-        } else if (of.isStandard()) {
-            result = getStandardValue(of);
         } else {
-            result = getCustomValue(of);
+            result = getStandardValue(of);
         }
         return result;
     }
@@ -133,21 +129,36 @@ public class Profile implements User {
         } else {
             _userDetailsManager.setStringProperty(this, of.getId(), to);
         }
+        //noinspection deprecation
+        removeValueFromOldLocationIfNeeded(of);
     }
 
     @Nullable
     protected String getStandardValue(@Nonnull ElementModel of) {
-        return _userDetailsManager.getStringProperty(this, of.getId());
+        String result = _userDetailsManager.getStringProperty(this, of.getId());
+        if (result == null) {
+            //noinspection deprecation
+            result = getValueFromOldLocation(of);
+        }
+        return result;
     }
 
-    protected void setCustomValue(@Nonnull ElementModel of, @Nullable String to) {
-        _bandanaManager.setValue(GLOBAL_CONTEXT, keyFor(of), to);
+    @Deprecated
+    protected void removeValueFromOldLocationIfNeeded(@Nonnull ElementModel of) {
+        _bandanaManager.removeValue(GLOBAL_CONTEXT, keyFor(of));
     }
 
     @Nullable
-    protected String getCustomValue(@Nonnull ElementModel of) {
+    @Deprecated
+    protected String getValueFromOldLocation(@Nonnull ElementModel of) {
         final Object value = _bandanaManager.getValue(GLOBAL_CONTEXT, keyFor(of));
-        return value != null ? value.toString() : null;
+        final String result = value != null ? value.toString() : null;
+        if (result != null) {
+            setStandardValue(of, result);
+            //noinspection deprecation
+            removeValueFromOldLocationIfNeeded(of);
+        }
+        return result;
     }
 
     @Nonnull
