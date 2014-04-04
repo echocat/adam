@@ -312,18 +312,30 @@ public class ExtendedPeopleDirectoryAction extends PeopleDirectoryAction {
     @Nonnull
     @HtmlSafe
     public String buildLinkFor(@Nonnull HttpServletRequest request) {
-        return buildLinkFor(request, _report);
+        return buildLinkFor(request, false);
     }
 
     @Nonnull
     @HtmlSafe
     public String buildLinkFor(@Nonnull HttpServletRequest request, @Nullable Report report) {
-        return buildLinkFor(request, getQueryString(), _view, report);
+        return buildLinkFor(request, report, false);
     }
 
     @Nonnull
     @HtmlSafe
-    public String buildLinkFor(@Nonnull HttpServletRequest request, @Nullable String queryString, @Nullable View view, @Nullable Report report) {
+    public String buildLinkFor(@Nonnull HttpServletRequest request, boolean requireReportParameter) {
+        return buildLinkFor(request, _report, requireReportParameter);
+    }
+
+    @Nonnull
+    @HtmlSafe
+    public String buildLinkFor(@Nonnull HttpServletRequest request, @Nullable Report report, boolean requireReportParameter) {
+        return buildLinkFor(request, getQueryString(), _view, report, requireReportParameter);
+    }
+
+    @Nonnull
+    @HtmlSafe
+    public String buildLinkFor(@Nonnull HttpServletRequest request, @Nullable String queryString, @Nullable View view, @Nullable Report report, boolean requireReportParameter) {
         final StringBuilder sb = new StringBuilder();
         sb.append(request.getContextPath()).append('/');
         boolean qma = false;
@@ -344,6 +356,9 @@ public class ExtendedPeopleDirectoryAction extends PeopleDirectoryAction {
             final Report targetReport = evaluateReportFor(report, getAuthenticatedUser());
             if (targetReport != null) {
                 sb.append(qma ? "&" : "?").append("report=").append(urlEncode(targetReport.getId()));
+                qma = true;
+            } else if (requireReportParameter) {
+                sb.append(qma ? "&" : "?").append("report=").append(urlEncode(getReportProvider().provideDefaultId()));
                 qma = true;
             }
         }

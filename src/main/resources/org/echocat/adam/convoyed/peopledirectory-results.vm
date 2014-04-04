@@ -107,7 +107,7 @@
                                             #end
                                             <br style="clear: left;">
                                         #end
-                                        #set ($formAction = "${action.buildLinkFor($req)}&")
+                                        #set ($formAction = "${action.buildLinkFor($req, true)}&")
                                         #pagination ($action.paginationSupport $formAction)
                                     #else
                                         #if ($action.fieldErrors.size() == 0)
