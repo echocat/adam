@@ -24,6 +24,7 @@ package org.echocat.adam.profile;
 import com.atlassian.bandana.BandanaManager;
 import com.atlassian.confluence.search.ConfluenceIndexer;
 import com.atlassian.confluence.user.PersonalInformationManager;
+import com.atlassian.confluence.user.UserAccessor;
 import com.atlassian.confluence.user.UserDetailsManager;
 import com.atlassian.crowd.model.user.UserWithAttributes;
 import com.atlassian.user.User;
@@ -47,6 +48,8 @@ public class ProfileProvider implements DisposableBean {
     }
 
     @Nonnull
+    private final UserAccessor _userAccessor;
+    @Nonnull
     private final BandanaManager _bandanaManager;
     @Nonnull
     private final UserDetailsManager _userDetailsManager;
@@ -55,7 +58,8 @@ public class ProfileProvider implements DisposableBean {
     @Nonnull
     private final ConfluenceIndexer _confluenceIndexer;
 
-    public ProfileProvider(@Nonnull BandanaManager bandanaManager, @Nonnull UserDetailsManager userDetailsManager, @Nonnull PersonalInformationManager personalInformationManager, @Nonnull ConfluenceIndexer confluenceIndexer) {
+    public ProfileProvider(@Nonnull UserAccessor userAccessor, @Nonnull BandanaManager bandanaManager, @Nonnull UserDetailsManager userDetailsManager, @Nonnull PersonalInformationManager personalInformationManager, @Nonnull ConfluenceIndexer confluenceIndexer) {
+        _userAccessor = userAccessor;
         _bandanaManager = bandanaManager;
         _userDetailsManager = userDetailsManager;
         _personalInformationManager = personalInformationManager;
@@ -65,12 +69,12 @@ public class ProfileProvider implements DisposableBean {
 
     @Nonnull
     public Profile provideFor(@Nonnull User user) {
-        return new Profile(user, _bandanaManager, _userDetailsManager, _personalInformationManager, _confluenceIndexer);
+        return new Profile(user, _bandanaManager, _userDetailsManager, _personalInformationManager, _confluenceIndexer, _userAccessor);
     }
 
     @Nonnull
     public Profile provideFor(@Nonnull UserWithAttributes user) {
-        return new Profile(user.getName(), user.getDisplayName(), user.getEmailAddress(), _bandanaManager, _userDetailsManager, _personalInformationManager, _confluenceIndexer);
+        return new Profile(user.getName(), user.getDisplayName(), user.getEmailAddress(), _bandanaManager, _userDetailsManager, _personalInformationManager, _confluenceIndexer, _userAccessor);
     }
 
     @Override

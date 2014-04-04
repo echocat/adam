@@ -25,6 +25,7 @@ import com.atlassian.bandana.BandanaManager;
 import com.atlassian.confluence.search.ConfluenceIndexer;
 import com.atlassian.confluence.user.PersonalInformation;
 import com.atlassian.confluence.user.PersonalInformationManager;
+import com.atlassian.confluence.user.UserAccessor;
 import com.atlassian.confluence.user.UserDetailsManager;
 import com.atlassian.user.User;
 import org.echocat.adam.profile.element.ElementModel;
@@ -39,6 +40,8 @@ import static org.apache.commons.lang3.StringUtils.isEmpty;
 public class Profile implements User {
 
     @Nonnull
+    private final UserAccessor _userAccessor;
+    @Nonnull
     private final BandanaManager _bandanaManager;
     @Nonnull
     private final UserDetailsManager _userDetailsManager;
@@ -50,15 +53,16 @@ public class Profile implements User {
     @Nonnull
     private final String _name;
     @Nullable
-    private final String _fullName;
+    private String _fullName;
     @Nullable
-    private final String _email;
+    private String _email;
 
-    public Profile(@Nonnull User user, @Nonnull BandanaManager bandanaManager, @Nonnull UserDetailsManager userDetailsManager, @Nonnull PersonalInformationManager personalInformationManager, @Nonnull ConfluenceIndexer confluenceIndexer) {
-        this(user.getName(), user.getFullName(), user.getEmail(), bandanaManager, userDetailsManager, personalInformationManager, confluenceIndexer);
+    public Profile(@Nonnull User user, @Nonnull BandanaManager bandanaManager, @Nonnull UserDetailsManager userDetailsManager, @Nonnull PersonalInformationManager personalInformationManager, @Nonnull ConfluenceIndexer confluenceIndexer, @Nonnull UserAccessor userAccessor) {
+        this(user.getName(), user.getFullName(), user.getEmail(), bandanaManager, userDetailsManager, personalInformationManager, confluenceIndexer, userAccessor);
     }
 
-    public Profile(@Nonnull String name, @Nullable String fullName, @Nullable String email, @Nonnull BandanaManager bandanaManager, @Nonnull UserDetailsManager userDetailsManager, @Nonnull PersonalInformationManager personalInformationManager, @Nonnull ConfluenceIndexer confluenceIndexer) {
+    public Profile(@Nonnull String name, @Nullable String fullName, @Nullable String email, @Nonnull BandanaManager bandanaManager, @Nonnull UserDetailsManager userDetailsManager, @Nonnull PersonalInformationManager personalInformationManager, @Nonnull ConfluenceIndexer confluenceIndexer, @Nonnull UserAccessor userAccessor) {
+        _userAccessor = userAccessor;
         _name = name;
         _fullName = fullName;
         _email = email;
@@ -75,9 +79,11 @@ public class Profile implements User {
     public void setValue(@Nonnull ElementModel of, @Nullable String to) {
         final String id = of.getId();
         if (ElementModel.FULL_NAME_ELEMENT_ID.equals(id)) {
-            // TODO!
+            _fullName = to;
+            _userAccessor.saveUser(this);
         } else if (ElementModel.EMAIL_ELEMENT_ID.equals(id)) {
-            // TODO!
+            _email = to;
+            _userAccessor.saveUser(this);
         } else if (ElementModel.PERSONAL_INFORMATION_ELEMENT_ID.equals(id)) {
             setPersonalInformationBody(to);
         } else {
