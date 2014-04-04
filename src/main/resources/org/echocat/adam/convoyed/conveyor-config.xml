@@ -34,14 +34,13 @@
         </action-override>
 
         <action-override name="editmyprofile" class="org.echocat.adam.profile.ExtendedEditMyProfileAction" method="doInput" inherit="false">
-            <result name="success" type="velocity">/org/echocat/adam/convoyed/editmyprofile.vm</result>
             <result name="input" type="velocity">/org/echocat/adam/convoyed/editmyprofile.vm</result>
         </action-override>
         <action-override name="doeditmyprofile" class="org.echocat.adam.profile.ExtendedEditMyProfileAction" method="doEdit" inherit="false">
             <result name="input" type="velocity">/org/echocat/adam/convoyed/editmyprofile.vm</result>
             <result name="error" type="velocity">/org/echocat/adam/convoyed/editmyprofile.vm</result>
-            <result name="cancel" type="velocity">/org/echocat/adam/convoyed/editmyprofile.vm</result>
-            <result name="success" type="velocity">/org/echocat/adam/convoyed/editmyprofile.vm</result>
+            <result name="cancel" type="redirect">/users/viewmyprofile.action</result>
+            <result name="success" type="redirect">/users/viewmyprofile.action</result>
         </action-override>
     </package-override>
 
