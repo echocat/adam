@@ -43,6 +43,8 @@
         <version.com.atlassian.confluence.data>5.3.4</version.com.atlassian.confluence.data>
         <version.com.atlassian.maven.plugins.amps>4.2.10</version.com.atlassian.maven.plugins.amps>
         <version.com.atlassian.plugins.testrunner>1.1.1</version.com.atlassian.plugins.testrunner>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     </properties>
 
     <organization>
