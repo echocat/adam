@@ -113,6 +113,13 @@
         </parameters>
     </xhtml-macro>
 
+    <macro name="user-profile" key="userProfileMacroOld" class="org.echocat.adam.profile.UserProfileMacroOld" icon="/images/icons/profilepics/anonymous.png">
+        <category name="confluence-content" />
+        <parameters>
+            <parameter name="username" type="username" required="true" />
+        </parameters>
+    </macro>
+
     <web-panel key="viewMyUserProfileWebPanel" name="View my user profile WebPanel" location="atl.confluence.userprofile.info" weight="100" class="org.echocat.adam.profile.ViewMyUserProfileWebPanel" />
     <web-panel key="editUserProfileWebPanel" name="Edit user profile WebPanel" location="atl.confluence.userprofile.edit" weight="100" class="org.echocat.adam.profile.EditUserProfileWebPanel" />
 

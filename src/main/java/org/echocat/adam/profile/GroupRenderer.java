@@ -64,6 +64,17 @@ public class GroupRenderer implements DisposableBean {
         return result;
     }
 
+    public boolean isRenderOfOverviewAllowedFor(@Nonnull Group group, @Nullable User currentUser, @Nonnull Profile profile) {
+        boolean result = false;
+        for (final ElementModel model : group) {
+            if (_elementRenderer.isRenderOfOverviewAllowedFor(model, currentUser, profile)) {
+                result = true;
+                break;
+            }
+        }
+        return result;
+    }
+
     public boolean isRenderOfEditAllowedFor(@Nonnull Group group, @Nullable User currentUser, @Nonnull Profile profile) {
         boolean result = false;
         for (final ElementModel model : group) {

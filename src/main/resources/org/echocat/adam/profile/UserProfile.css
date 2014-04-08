@@ -30,17 +30,23 @@ form[name=editUser] input[readonly] {
     background: #f0f0f0;
 }
 
+.adam-profile-marco.profile-hover {
+    min-height: 62px;
+}
+
 .adam-profile-marco.profile-full {
-    width: 500px;
     font-size: 14px;
+    width: 500px;
     border: 1px solid #ccc;
     padding: 4px 4px 2px 4px;
     border-radius: 3px;
 }
 
-.adam-profile-marco.profile-full .vcard {
+.adam-profile-marco.profile-full .vcard,
+.adam-profile-marco.profile-hover .vcard {
     float: left;
     position: absolute;
+    border: none;
 }
 
 .adam-profile-marco.profile-full .profile-group:not(:first-child) {
@@ -72,4 +78,28 @@ form[name=editUser] input[readonly] {
     display: inline-block;
     padding: 0;
     margin-left: 118px;
+}
+
+.adam-profile-marco.profile-hover .profile-elements {
+    margin-left: 62px;
+}
+
+.adam-profile-marco.profile-hover .field-group label {
+    font-size: 0.8em;
+    color: #707070;
+    font-weight: bold;
+    margin-right: 5px;
+    white-space: nowrap;
+}
+
+.ajs-content-hover > div.contents {
+    width: auto !important;
+}
+
+.ajs-content-hover .actions ul.ajs-menu-bar .popup-follow {
+    width: 225px;
+}
+
+.ajs-content-hover .actions ul li {
+    width: 219px;
 }

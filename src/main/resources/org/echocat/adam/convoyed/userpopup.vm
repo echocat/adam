@@ -1,0 +1,18 @@
+#* @vtlvariable name="action" type="com.atlassian.confluence.user.actions.UserPopupAction" *#
+$helper.renderConfluenceMacro("{user-profile:username=%s|format=hover}", $action.username)
+
+<div class="actions">
+    <ul class="ajs-menu-bar #if (!$action.canFollowUser()) single-item #end">
+        #if ($action.canFollowUser())
+            <li class="popup-follow ajs-button ajs-menu-item#if ($action.following) unfollow-item#else follow-item#end">
+                <a class="unfollow" title="$i18n.getText("person.follow.remove", [$generalUtil.htmlEncode($action.user.fullName)])" href="$req.contextPath/unfollowuser.action?mode=profile&username=$generalUtil.urlEncode($action.user.name)&#url_xsrfToken()">
+                    <span class="unfollow-text">$i18n.getText("person.follow.stop")</span>
+                </a>
+                <a class="follow" title="$i18n.getText("person.follow.add", [$generalUtil.htmlEncode($action.user.fullName)])" href="$req.contextPath/followuser.action?mode=profile&username=$generalUtil.urlEncode($action.user.name)&#url_xsrfToken()">
+                    <span class="follow-text">$i18n.getText("person.follow")</span>
+                </a>
+            </li>
+        #end
+        #menuMacros_renderMenu("user-popup-menu-$generalUtil.htmlEncode($action.user.name)", $i18n.getText("more.word.capitalised"), "user-popup-more", "system.user.hover")
+    </ul>
+</div>

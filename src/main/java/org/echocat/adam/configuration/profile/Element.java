@@ -50,7 +50,8 @@ public class Element extends Localized {
     private Template _template;
     private boolean _searchable = true;
     private boolean _visibleIfEmpty;
-    private boolean _defaultForReports;
+    private Boolean _defaultForReports;
+    private Boolean _visibleOnOverviews;
 
     @Nullable
     @XmlElement(name = "contextAttribute", namespace = SCHEMA_NAMESPACE)
@@ -111,15 +112,23 @@ public class Element extends Localized {
     }
 
     @XmlAttribute(name = "defaultForReports")
-    public boolean isDefaultForReports() {
+    public Boolean getDefaultForReports() {
         return _defaultForReports;
     }
 
-    public void setDefaultForReports(boolean defaultForReports) {
+    public void setDefaultForReports(Boolean defaultForReports) {
         _defaultForReports = defaultForReports;
     }
 
     @XmlType(name = "profileGroupElementContextAttribute", namespace = SCHEMA_NAMESPACE)
     public static class ContextAttribute extends IdEnabled {}
 
+    public Boolean getVisibleOnOverviews() {
+        return _visibleOnOverviews;
+    }
+
+    @XmlAttribute(name = "visibleOnOverviews")
+    public void setVisibleOnOverviews(Boolean visibleOnOverviews) {
+        _visibleOnOverviews = visibleOnOverviews;
+    }
 }

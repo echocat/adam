@@ -131,6 +131,20 @@ public class ElementRenderer implements DisposableBean {
         return result;
     }
 
+    public boolean isRenderOfOverviewAllowedFor(@Nonnull ElementModel model, @Nullable User currentUser, @Nonnull Profile profile) {
+        final boolean result;
+        if (model.getAccess().checkView(currentUser, profile).isViewAllowed()) {
+            if (!isEmpty(profile.getValue(model))) {
+                result = !PERSONAL_INFORMATION_ELEMENT_ID.equals(model.getId()) && model.isVisibleOnOverviews();
+            } else {
+                result = false;
+            }
+        } else {
+            result = false;
+        }
+        return result;
+    }
+
     public boolean isRenderOfEditAllowedFor(@Nonnull ElementModel model, @Nullable User currentUser, @Nonnull Profile profile) {
         final boolean result;
         if (model.getAccess().checkEdit(currentUser, profile).isEditAllowed() && model.getTemplate() == null) {

@@ -48,6 +48,8 @@ public interface ElementModel extends Localized {
 
     public boolean isDefaultForReports();
 
+    public boolean isVisibleOnOverviews();
+
     @Nullable
     public List<String> getContextAttributeKeys();
 

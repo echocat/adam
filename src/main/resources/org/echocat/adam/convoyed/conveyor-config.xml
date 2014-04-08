@@ -42,6 +42,11 @@
             <result name="cancel" type="redirect">/users/viewmyprofile.action</result>
             <result name="success" type="redirect">/users/viewmyprofile.action</result>
         </action-override>
+
+        <action-override name="userinfopopup" class="com.atlassian.confluence.user.actions.UserPopupAction" inherit="false">
+            <result name="success" type="velocity">/org/echocat/adam/convoyed/userpopup.vm</result>
+            <result name="notpermitted" type="velocity">/users/userpopup-notpermitted.vm</result>
+        </action-override>
     </package-override>
 
     <package-override name="usermanagement" extends="default" namespace="/admin/users">

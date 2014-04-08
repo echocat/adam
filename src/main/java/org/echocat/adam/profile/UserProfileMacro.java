@@ -177,7 +177,8 @@ public class UserProfileMacro implements Macro {
 
     public static enum Format {
         elementsOnly,
-        full
+        full,
+        hover
     }
 
 }

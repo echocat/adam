@@ -75,7 +75,8 @@
                 <xsd:attribute name="type" type="profileGroupElementType" use="optional" default="singleLineText" />
                 <xsd:attribute name="searchable" type="xsd:boolean" use="optional" default="true" />
                 <xsd:attribute name="visibleIfEmpty" type="xsd:boolean" use="optional" default="false" />
-                <xsd:attribute name="defaultForReports" type="xsd:boolean" use="optional" default="false" />
+                <xsd:attribute name="defaultForReports" type="xsd:boolean" use="optional" />
+                <xsd:attribute name="visibleOnOverviews" type="xsd:boolean" use="optional" />
             </xsd:extension>
         </xsd:complexContent>
     </xsd:complexType>

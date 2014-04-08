@@ -171,6 +171,13 @@ public class ElementModelProvider {
         }
 
         @Override
+        public boolean isVisibleOnOverviews() {
+            final String id = getId();
+            return EMAIL_ELEMENT_ID.equals(id)
+                || FULL_NAME_ELEMENT_ID.equals(id);
+        }
+
+        @Override
         public boolean isDefaultForReports() {
             final String id = getId();
             return EMAIL_ELEMENT_ID.equals(id)
@@ -267,7 +274,31 @@ public class ElementModelProvider {
 
         @Override
         public boolean isDefaultForReports() {
-            return _source.isDefaultForReports();
+            final Boolean value = _source.getDefaultForReports();
+            final boolean result;
+            if (value != null) {
+                result = value;
+            } else {
+                final String id = getId();
+                result = EMAIL_ELEMENT_ID.equals(id)
+                    || PHONE_ELEMENT_ID.equals(id)
+                    || FULL_NAME_ELEMENT_ID.equals(id);
+            }
+            return result;
+        }
+
+        @Override
+        public boolean isVisibleOnOverviews() {
+            final Boolean value = _source.getVisibleOnOverviews();
+            final boolean result;
+            if (value != null) {
+                result = value;
+            } else {
+                final String id = getId();
+                result = EMAIL_ELEMENT_ID.equals(id)
+                    || FULL_NAME_ELEMENT_ID.equals(id);
+            }
+            return result;
         }
 
         @Override
