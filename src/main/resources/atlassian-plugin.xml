@@ -81,6 +81,7 @@
     <component key="ldapDirectorySynchronizer" name="LDAP directory synchronizer" class="org.echocat.adam.synchronization.LdapDirectorySynchronizer" />
     <component key="userProfileMacroRenderer" name="User profile macro renderer" class="org.echocat.adam.profile.ViewMyUserProfileWebPanel"  />
     <component key="extendedWebInterfaceManager" name="Extended web interface manager" class="org.echocat.adam.extensions.ExtendedWebInterfaceManager" interface="com.atlassian.plugin.web.WebInterfaceManager" public="true" />
+    <component key="userHelper" name="User helper" class="org.echocat.adam.profile.UserHelper" />
 
     <!-- =================================================================================================================== -->
 
@@ -166,5 +167,36 @@
         <label key="${project.groupId}.${project.artifactId}.administration.label" />
         <link>/plugins/${project.groupId}.${project.artifactId}/administration.action</link>
     </web-item>
+
+    <!-- =================================================================================================================== -->
+
+    <web-resource key="mobileProfile" name="Mobile user profile resources">
+        <transformation extension="js">
+            <transformer key="jsI18n"/>
+        </transformation>
+        <transformation extension="soy">
+            <transformer key="soyTransformer">
+                <functions>com.atlassian.confluence.plugins.soy:soy-core-functions</functions>
+            </transformer>
+        </transformation>
+        <resource type="download" name="profile.soy.js" location="/org/echocat/adam/profile/mobile/profile.soy"/>
+        <resource type="download" name="profile.js" location="/org/echocat/adam/profile/mobile/profile.js"/>
+
+        <context>atl.mobile.confluence.view-profile</context>
+    </web-resource>
+
+    <servlet-filter key="restActionRewriteFilter.profiles" name="REST action rewrite filter for profiles" class="org.echocat.adam.rest.RestActionRewriteFilter">
+        <url-pattern>/rest/mobile/latest/profile/*</url-pattern>
+        <dispatcher>REQUEST</dispatcher>
+    </servlet-filter>
+
+    <servlet-filter key="hackJsFilter" name="Hack JavaScript filter" class="org.echocat.adam.profile.mobile.HackJsFilter">
+        <url-pattern>/plugins/servlet/mobile</url-pattern>
+        <dispatcher>REQUEST</dispatcher>
+    </servlet-filter>
+
+    <component-import name="User DTO Factory" key="userDtoFactory" interface="com.atlassian.confluence.plugins.rest.dto.UserDtoFactory" />
+
+    <rest key="rest" name="REST API" path="/adam" version="1.0" />
 
 </atlassian-plugin>

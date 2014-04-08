@@ -1,0 +1,51 @@
+{namespace Confluence.Templates.Mobile.ProfileExtended}
+
+/**
+ * Render the profile page
+ * @param user (required) user
+ * @param emailVisibility the e-mail visibility - one of Settings.EMAIL_ADDRESS_PUBLIC, Settings.EMAIL_ADDRESS_MASKED or Settings.EMAIL_ADDRESS_PRIVATE
+ */
+{template .profile}
+<div id="user-profile">
+    <div id="primary-profile">
+        <img src="{$user.avatarUrl}" alt="{$user.fullName}" />
+        <h2>{$user.fullName}</h2>
+        <dl id="contact-details">
+            {if $user.email and $emailVisibility != 'email.address.private'}
+            <dt>
+                {getText('email.name')}
+            </dt>
+            <dd>
+                {if $emailVisibility == 'email.address.public'}
+                <a href="mailto:{$user.email}">{$user.email}</a>
+                {else}
+                {$user.email}
+                {/if}
+            </dd>
+            {/if}
+        </dl>
+    </div>
+
+    <dl id="user-details">
+
+        {foreach $group in $user.groups}
+            <dd><h2 id="profile.group.{$group.id}" class="profileGroup">{$group.label|noAutoescape}</h2></dd>
+
+            {foreach $element in $group.elements}
+                <dt class="profileElementLabel">{$element.label|noAutoescape}</dt>
+                <dd id="profile.element.{$element.id}" class="profileElementValue {$element.type}">{$element.valueAsHtml|noAutoescape}</dd>
+            {/foreach}
+
+        {/foreach}
+
+        {if $user.about}
+            <dd><h2 id="profile.about" class="profileGroup">{getText('personal.info')}</h2></dd>
+            <dd>{$user.about|noAutoescape}</dd>
+        {/if}
+
+    </dl>
+
+</div>
+{/template}
+
+
