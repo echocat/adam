@@ -1,5 +1,5 @@
-#* @vtlvariable name="action" type="com.atlassian.confluence.user.actions.UserPopupAction" *#
-$helper.renderConfluenceMacro("{user-profile:username=%s|format=hover}", $action.username)
+#* @vtlvariable name="action" type="org.echocat.adam.profile.ExtendedUserPopupAction" *#
+${helper.renderConfluenceMacro("{user-profile:username=%s|border=hidden|groupLabels=hidden|labels=hidden|enableUserLinkIfPossible=false|fullNameTagName=h4|elements=$\$view:${action.viewProvider.hoverId}$$}", $action.username)}
 
 <div class="actions">
     <ul class="ajs-menu-bar #if (!$action.canFollowUser()) single-item #end">

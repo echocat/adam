@@ -23,6 +23,7 @@ package org.echocat.adam.configuration;
 
 import org.echocat.adam.configuration.profile.Profile;
 import org.echocat.adam.configuration.report.Report;
+import org.echocat.adam.configuration.view.View;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -42,8 +43,14 @@ public class Configuration {
     private Profile _profile;
     @Nullable
     private List<Report> _reports;
+    @Nullable
+    private List<View> _views;
     @Nonnull
     private String _defaultReport = org.echocat.adam.report.Report.DEFAULT_ID;
+    @Nonnull
+    private String _defaultView = org.echocat.adam.view.View.DEFAULT_ID;
+    @Nonnull
+    private String _hoverView = org.echocat.adam.view.View.COMPACT_ID;
 
     @Nullable
     @XmlElement(name = "profile", namespace = SCHEMA_NAMESPACE)
@@ -65,6 +72,17 @@ public class Configuration {
         _reports = reports;
     }
 
+
+    @Nullable
+    @XmlElement(name = "view", namespace = SCHEMA_NAMESPACE)
+    public List<View> getViews() {
+        return _views;
+    }
+
+    public void setViews(@Nullable List<View> views) {
+        _views = views;
+    }
+
     @Nonnull
     @XmlAttribute(name = "defaultReport")
     public String getDefaultReport() {
@@ -73,6 +91,26 @@ public class Configuration {
 
     public void setDefaultReport(@Nonnull String defaultReport) {
         _defaultReport = defaultReport;
+    }
+
+    @Nonnull
+    @XmlAttribute(name = "defaultView")
+    public String getDefaultView() {
+        return _defaultView;
+    }
+
+    public void setDefaultView(@Nonnull String defaultView) {
+        _defaultView = defaultView;
+    }
+
+    @Nonnull
+    @XmlAttribute(name = "hoverView")
+    public String getHoverView() {
+        return _hoverView;
+    }
+
+    public void setHoverView(@Nonnull String hoverView) {
+        _hoverView = hoverView;
     }
 
 }

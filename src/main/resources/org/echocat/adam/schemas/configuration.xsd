@@ -36,8 +36,11 @@
         <xsd:choice minOccurs="0" maxOccurs="unbounded">
             <xsd:element name="profile" type="profile" />
             <xsd:element name="report" type="report" />
+            <xsd:element name="view" type="view" />
         </xsd:choice>
         <xsd:attribute name="defaultReport" type="id" use="optional" default="all" />
+        <xsd:attribute name="defaultView" type="id" use="optional" default="default" />
+        <xsd:attribute name="hoverView" type="id" use="optional" default="compact" />
     </xsd:complexType>
 
     <!-- Profile ========================================================================================================================================== -->
@@ -61,6 +64,26 @@
         </xsd:complexContent>
     </xsd:complexType>
 
+    <!-- View ============================================================================================================================================= -->
+
+    <xsd:complexType name="view">
+        <xsd:complexContent>
+            <xsd:extension base="idEnabled">
+                <xsd:choice minOccurs="0" maxOccurs="unbounded">
+                    <xsd:element name="localization" type="localization" minOccurs="0" maxOccurs="unbounded" />
+                    <xsd:element name="element" type="viewElement" minOccurs="0" maxOccurs="unbounded" />
+                    <xsd:element name="access" type="accessView" />
+                </xsd:choice>
+            </xsd:extension>
+        </xsd:complexContent>
+    </xsd:complexType>
+
+    <xsd:complexType name="viewElement">
+        <xsd:complexContent>
+            <xsd:extension base="idEnabled" />
+        </xsd:complexContent>
+    </xsd:complexType>
+
     <!-- ProfileGroupElement ============================================================================================================================== -->
 
     <xsd:complexType name="profileGroupElement">
@@ -76,7 +99,6 @@
                 <xsd:attribute name="searchable" type="xsd:boolean" use="optional" default="true" />
                 <xsd:attribute name="visibleIfEmpty" type="xsd:boolean" use="optional" default="false" />
                 <xsd:attribute name="defaultForReports" type="xsd:boolean" use="optional" />
-                <xsd:attribute name="visibleOnOverviews" type="xsd:boolean" use="optional" />
             </xsd:extension>
         </xsd:complexContent>
     </xsd:complexType>

@@ -80,15 +80,7 @@
                                                             #foreach($column in $columns)
                                                                 <td class="confluenceTd">
                                                                     #if($columnRenderer.isRenderOfViewAllowedFor($column, $authenticatedUser, $profile))
-                                                                        #set($isLink = false)
-                                                                        #if ($column.link.name() == "profile")
-                                                                            #set($isLink = true)
-                                                                            <a class="confluence-userlink" data-username="${generalUtil.escapeForHtmlAttribute($profile.name)}" href="$!{req.contextPath}/display/~${generalUtil.escapeForHtmlAttribute($profile.name)}">
-                                                                        #end
                                                                         $!{columnRenderer.renderViewXhtml($column, $authenticatedUser, $profile)}
-                                                                        #if ($isLink)
-                                                                            </a>
-                                                                        #end
                                                                     #end
                                                                 </td>
                                                             #end

@@ -51,7 +51,6 @@ public class Element extends Localized {
     private boolean _searchable = true;
     private boolean _visibleIfEmpty;
     private Boolean _defaultForReports;
-    private Boolean _visibleOnOverviews;
 
     @Nullable
     @XmlElement(name = "contextAttribute", namespace = SCHEMA_NAMESPACE)
@@ -123,12 +122,4 @@ public class Element extends Localized {
     @XmlType(name = "profileGroupElementContextAttribute", namespace = SCHEMA_NAMESPACE)
     public static class ContextAttribute extends IdEnabled {}
 
-    public Boolean getVisibleOnOverviews() {
-        return _visibleOnOverviews;
-    }
-
-    @XmlAttribute(name = "visibleOnOverviews")
-    public void setVisibleOnOverviews(Boolean visibleOnOverviews) {
-        _visibleOnOverviews = visibleOnOverviews;
-    }
 }

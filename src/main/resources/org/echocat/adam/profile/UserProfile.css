@@ -30,38 +30,40 @@ form[name=editUser] input[readonly] {
     background: #f0f0f0;
 }
 
-.adam-profile-marco.profile-hover {
-    min-height: 62px;
+.adam-profile-marco {
+    font-size: 14px;
 }
 
-.adam-profile-marco.profile-full {
-    font-size: 14px;
+.adam-profile-marco.with-border {
     width: 500px;
     border: 1px solid #ccc;
-    padding: 4px 4px 2px 4px;
     border-radius: 3px;
+    padding: 4px 4px 2px 4px;
 }
 
-.adam-profile-marco.profile-full .vcard,
-.adam-profile-marco.profile-hover .vcard {
+.adam-profile-marco .vcard {
     float: left;
     position: absolute;
     border: none;
 }
 
-.adam-profile-marco.profile-full .profile-group:not(:first-child) {
+.adam-profile-marco .profile-group:not(:first-child) {
     margin-top: 0.75em;
 }
 
-.adam-profile-marco.profile-full .field-group,
-.adam-profile-marco.profile-full .profile-group {
+.adam-profile-marco .field-group,
+.adam-profile-marco .profile-group {
     box-sizing: border-box;
-    padding: 0 0 2px 60px;
     margin: 0;
     clear: both;
 }
 
-.adam-profile-marco.profile-full .field-group label {
+.adam-profile-marco.with-avatar .field-group,
+.adam-profile-marco.with-avatar .profile-group {
+    padding: 0 0 2px 58px;
+}
+
+.adam-profile-marco .field-group label {
     float: left;
     position: absolute;
     padding: 0;
@@ -74,32 +76,43 @@ form[name=editUser] input[readonly] {
     font-weight: bold;
 }
 
-.adam-profile-marco.profile-full .field-group .field-value {
+.adam-profile-marco .field-group .field-value {
     display: inline-block;
     padding: 0;
+}
+
+.adam-profile-marco .field-group.with-label .field-value {
     margin-left: 118px;
 }
 
-.adam-profile-marco.profile-hover .profile-elements {
-    margin-left: 62px;
+.ajs-content-hover .adam-profile-marco.with-avatar .field-group,
+.ajs-content-hover .adam-profile-marco.with-avatar .profile-group {
+    padding: 0 0 2px 64px;
 }
 
-.adam-profile-marco.profile-hover .field-group label {
-    font-size: 0.8em;
-    color: #707070;
-    font-weight: bold;
-    margin-right: 5px;
-    white-space: nowrap;
+.ajs-content-hover .adam-profile-marco .profile-elements {
+    padding-top: 9px;
 }
 
-.ajs-content-hover > div.contents {
-    width: auto !important;
+.ajs-content-hover .adam-profile-marco {
+    min-height: 62px;
 }
 
-.ajs-content-hover .actions ul.ajs-menu-bar .popup-follow {
-    width: 225px;
+.adam-profile-webpanel .adam-profile-marco .field-group {
+    padding: 4px 0;
 }
 
-.ajs-content-hover .actions ul li {
-    width: 219px;
+.adam-profile-webpanel .adam-profile-marco label {
+    font-size: 14px;
+    font-weight: normal;
+    width: 150px;
+}
+
+.adam-profile-webpanel .adam-profile-marco .field-value {
+    font-weight: normal;
+    padding: 4px 0 0 0;
+}
+
+.adam-profile-webpanel .adam-profile-marco .field-group.with-label .field-value {
+    margin-left: 150px;
 }

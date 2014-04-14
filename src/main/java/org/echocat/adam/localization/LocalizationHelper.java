@@ -144,7 +144,7 @@ public class LocalizationHelper implements DisposableBean {
             final String linkText = i18n.getText("more.about.input.accepts.wiki.markup");
             result = text + " <a href=\"" + link + "\" target=\"_blank\">" + linkText + "</a>";
         } else {
-            result = "";
+            result = null;
         }
         return result;
     }

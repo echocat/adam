@@ -1,3 +1,22 @@
+#* @vtlvariable name="elementModel" type="org.echocat.adam.profile.element.ElementModel" *#
+#* @vtlvariable name="hints" type="org.echocat.jomon.runtime.util.Hints" *#
+#* @vtlvariable name="enableUserLinkIfPossible" type="org.echocat.jomon.runtime.util.Hint" *#
+#* @vtlvariable name="fullNameTagName" type="org.echocat.jomon.runtime.util.Hint" *#
+#* @vtlvariable name="profile" type="org.echocat.adam.profile.Profile" *#
 #if($!value != $!null)
-    <span class="field-value" id="${nodeId}">$!{elementRenderer.plainToXhtml($elementModel, $value)}</span>
+    #if($elementModel.id == "fullName")
+        #set($tagName = $hints.get($fullNameTagName, "span"))
+    #else
+        #set($tagName = "span")
+    #end
+    <$tagName class="field-value">
+    #if($elementModel.id == "fullName")
+        #if ($hints.isEnabled($enableUserLinkIfPossible))
+            #set($extraClass = "confluence-userlink")
+        #end
+        <a class="$!{extraClass}" data-username="${generalUtil.escapeForHtmlAttribute($profile.name)}" id="${nodeId}" href="$!{req.contextPath}/display/~${generalUtil.escapeForHtmlAttribute($profile.name)}">$!{elementRenderer.plainToXhtml($elementModel, $value)}</a>
+    #else
+        $!{elementRenderer.plainToXhtml($elementModel, $value)}
+    #end
+    </$tagName>
 #end

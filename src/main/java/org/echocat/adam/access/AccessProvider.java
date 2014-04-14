@@ -22,7 +22,6 @@
 package org.echocat.adam.access;
 
 import com.atlassian.confluence.security.PermissionManager;
-import com.atlassian.sal.api.user.UserProfile;
 import com.atlassian.user.EntityException;
 import com.atlassian.user.GroupManager;
 import com.atlassian.user.User;
@@ -49,6 +48,11 @@ public class AccessProvider {
     @Nonnull
     private final GroupManager _groupManager;
 
+    @Nonnull
+    private final ViewEditAccess _viewEditAccess = new DummyAccess();
+    @Nonnull
+    private final ViewAccess _viewAccess = new DummyAccess();
+
     public AccessProvider(@Nonnull PermissionManager permissionManager, @Nonnull GroupManager groupManager) {
         _permissionManager = permissionManager;
         _groupManager = groupManager;
@@ -62,6 +66,16 @@ public class AccessProvider {
     @Nonnull
     public ViewAccess provideFor(@Nullable org.echocat.adam.configuration.access.view.ViewAccess source) {
         return source != null ? new ViewAccessImpl(source) : new DummyAccess();
+    }
+
+    @Nonnull
+    public ViewAccess allowAllViewEditAccess() {
+        return _viewEditAccess;
+    }
+
+    @Nonnull
+    public ViewAccess allowAllViewAccess() {
+        return _viewAccess;
     }
 
     protected class DummyAccess implements ViewEditAccess {

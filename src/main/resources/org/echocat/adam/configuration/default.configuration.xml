@@ -26,7 +26,11 @@ It expects a remote LDAP directory of type ActiveDirectory.
 
 See https://github.com/echocat/adam for documentation.
 -->
-<configuration xmlns="https://adam.echocat.org/schemas/configuration.xsd" defaultReport="all">
+<configuration xmlns="https://adam.echocat.org/schemas/configuration.xsd"
+               defaultReport="all"
+               defaultView="default"
+               hoverView="compact">
+
     <profile>
         <group id="personal">
             <element id="fullName" defaultForReports="true">
@@ -148,5 +152,34 @@ See https://github.com/echocat/adam for documentation.
         </column>
         <column id="mobile" />
     </report>
+
+    <view id="default">
+        <element id="fullName" />
+        <element id="email" />
+        <element id="telephone" />
+        <element id="mobile" />
+        <element id="company" />
+        <element id="department" />
+        <element id="position" />
+    </view>
+
+    <view id="contact">
+        <localization locale="en_US" title="Contact" />
+        <localization locale="de_DE" title="Kontakt" />
+        <access>
+            <administrator view="allowed" />
+            <group name="employees" view="allowed" />
+            <default view="forbidden" />
+        </access>
+        <element id="fullName" />
+        <element id="email" />
+        <element id="telephone" />
+        <element id="mobile" />
+    </view>
+
+    <view id="compact">
+        <element id="fullName" />
+        <element id="email" />
+    </view>
 
 </configuration>

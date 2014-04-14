@@ -533,11 +533,6 @@ public class ReportProvider implements Iterable<Report>, DisposableBean {
         public List<String> getContextAttributeKeys() {return _source.getContextAttributeKeys();}
 
         @Override
-        public boolean isVisibleOnOverviews() {
-            return _source.isVisibleOnOverviews();
-        }
-
-        @Override
         public boolean isSearchable() {return _source.isSearchable();}
 
         @Override

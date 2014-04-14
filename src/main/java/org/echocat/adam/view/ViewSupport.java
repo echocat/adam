@@ -19,20 +19,15 @@
  * *** END LICENSE BLOCK *****
  ****************************************************************************************/
 
-package org.echocat.adam.profile;
+package org.echocat.adam.view;
 
-import com.atlassian.user.User;
-import org.echocat.adam.access.ViewAccess;
 import org.echocat.adam.localization.LocalizedSupport;
-import org.echocat.adam.profile.element.ElementModel;
+import org.echocat.adam.profile.Group;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import javax.xml.bind.annotation.XmlTransient;
-import java.util.Iterator;
 
 @XmlTransient
-public abstract class GroupSupport extends LocalizedSupport implements Group {
+public abstract class ViewSupport extends LocalizedSupport implements View {
 
     @Override
     public boolean equals(Object o) {
@@ -56,25 +51,6 @@ public abstract class GroupSupport extends LocalizedSupport implements Group {
     @Override
     public String toString() {
         return "group:" + getId();
-    }
-
-    @Nonnull
-    @Override
-    public ViewAccess getAccess() {
-        return new ViewAccess() {
-            @Nonnull
-            @Override
-            public Visibility checkView(@Nullable User forUser, @Nullable User target) {
-                Visibility result = Visibility.forbidden;
-                for (final ElementModel elementModel : GroupSupport.this) {
-                    final Visibility candidate = elementModel.getAccess().checkView(forUser, target);
-                    if (Visibility.isBetterVisibility(candidate, result)) {
-                        result = candidate;
-                    }
-                }
-                return result;
-            }
-        };
     }
 
 }

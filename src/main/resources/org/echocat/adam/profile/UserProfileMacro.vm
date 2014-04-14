@@ -1,0 +1,42 @@
+#* @vtlvariable name="elementRenderer" type="org.echocat.adam.profile.element.ElementRenderer" *#
+#* @vtlvariable name="groups" type="java.util.List<org.echocat.adam.profile.Group>" *#
+#* @vtlvariable name="groupRenderer" type="org.echocat.adam.profile.GroupRenderer" *#
+#* @vtlvariable name="border" type="org.echocat.adam.profile.UserProfileMacro.Border" *#
+#* @vtlvariable name="avatar" type="org.echocat.adam.profile.UserProfileMacro.Avatar" *#
+#* @vtlvariable name="groupLabels" type="org.echocat.adam.profile.UserProfileMacro.GroupLabels" *#
+#* @vtlvariable name="labels" type="org.echocat.adam.profile.UserProfileMacro.Labels" *#
+#* @vtlvariable name="hints" type="org.echocat.jomon.runtime.util.Hints" *#
+#requireResource("org.echocat.adam:userProfileResources")
+<div class="adam-profile-marco profile-marco profile-full#if ($border == 'visible') with-border#end#if ($avatar == 'visible') with-avatar#end">
+    #if ($avatar == 'visible')
+        <div class="vcard">
+            #userLogoBlock($user)
+        </div>
+    #end
+    <div class="aui profile-elements">
+        #foreach($group in $groups)
+            #if ($groupRenderer.isRenderOfViewAllowedFor($group, $currentUser, $profile))
+                #if ($groupLabels == 'big')
+                    <h2 class="profile-group">${localizationHelper.getTitleFor($group, $locale)}</h2>
+                #elseif ($groupLabels == 'visible')
+                    <h4 class="profile-group">${localizationHelper.getTitleFor($group, $locale)}</h4>
+                #end
+                <fieldset>
+                    #foreach($elementModel in $group)
+                        #if ($elementRenderer.isRenderOfViewAllowedFor($elementModel, $currentUser, $profile))
+                            #set($title = $localizationHelper.getTitleFor($elementModel, $locale))
+                            #set($value = $elementRenderer.renderViewXhtml($elementModel, $currentUser, $profile, $hints))
+                            #set($nodeId = $elementRenderer.nodeIdFor($elementModel, $profile))
+                            <div class="profile-element field-group#if ($labels == 'visible') with-label#end viewMode">
+                                #if ($labels == 'visible')
+                                    <label id="labelFor-${nodeId}" for="${nodeId}">${elementRenderer.plainToXhtml($elementModel, $title)}</label>
+                                #end
+                                ${value}
+                            </div>
+                        #end
+                    #end
+                </fieldset>
+            #end
+        #end
+    </div>
+</div>

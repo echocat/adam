@@ -26,7 +26,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.echocat</groupId>
     <artifactId>adam</artifactId>
-    <version>0.1.6</version>
+    <version>0.2.0</version>
     <name>echocat Adam</name>
     <packaging>atlassian-plugin</packaging>
 

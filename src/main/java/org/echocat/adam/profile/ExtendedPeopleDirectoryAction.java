@@ -41,6 +41,7 @@ import com.opensymphony.xwork.ActionContext;
 import org.echocat.adam.localization.LocalizationHelper;
 import org.echocat.adam.profile.element.ElementRenderer;
 import org.echocat.adam.report.*;
+import org.echocat.adam.report.View;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

@@ -30,6 +30,9 @@ import com.atlassian.user.User;
 import org.echocat.adam.profile.Profile;
 import org.echocat.adam.template.Template;
 import org.echocat.adam.template.TemplateFormat;
+import org.echocat.jomon.runtime.util.Hint;
+import org.echocat.jomon.runtime.util.Hint.Impl;
+import org.echocat.jomon.runtime.util.Hints;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -48,8 +51,15 @@ import static org.echocat.adam.profile.element.ElementModel.FULL_NAME_ELEMENT_ID
 import static org.echocat.adam.profile.element.ElementModel.PERSONAL_INFORMATION_ELEMENT_ID;
 import static org.echocat.adam.template.TemplateFormat.plain;
 import static org.echocat.adam.template.TemplateFormat.velocity;
+import static org.echocat.jomon.runtime.util.Hint.Impl.hint;
+import static org.echocat.jomon.runtime.util.Hints.nonNullHints;
 
+@SuppressWarnings("ConstantNamingConvention")
 public class ElementRenderer implements DisposableBean {
+
+    @Nonnull
+    public static final Hint<Boolean> enableUserLinkIfPossible = hint(Boolean.class, ElementRenderer.class, "enableUserLinkIfPossible", true);
+    public static final Hint<String> fullNameTagName = hint(String.class, ElementRenderer.class, "fullNameTagName");
 
     @Nullable
     private static ElementRenderer c_instance;
@@ -131,20 +141,6 @@ public class ElementRenderer implements DisposableBean {
         return result;
     }
 
-    public boolean isRenderOfOverviewAllowedFor(@Nonnull ElementModel model, @Nullable User currentUser, @Nonnull Profile profile) {
-        final boolean result;
-        if (model.getAccess().checkView(currentUser, profile).isViewAllowed()) {
-            if (!isEmpty(profile.getValue(model))) {
-                result = !PERSONAL_INFORMATION_ELEMENT_ID.equals(model.getId()) && model.isVisibleOnOverviews();
-            } else {
-                result = false;
-            }
-        } else {
-            result = false;
-        }
-        return result;
-    }
-
     public boolean isRenderOfEditAllowedFor(@Nonnull ElementModel model, @Nullable User currentUser, @Nonnull Profile profile) {
         final boolean result;
         if (model.getAccess().checkEdit(currentUser, profile).isEditAllowed() && model.getTemplate() == null) {
@@ -163,21 +159,33 @@ public class ElementRenderer implements DisposableBean {
 
     @Nonnull
     @HtmlSafe
-    public String renderViewXhtml(@Nonnull ElementModel model, @Nullable User currentUser, @Nonnull Profile profile) {
+    public String renderViewXhtml(@Nonnull ElementModel model, @Nullable User currentUser, @Nonnull Profile profile, @Nullable Hints hints) {
         final String value = getViewValueFor(model, currentUser, profile);
-        return renderXhtml(model, currentUser, profile, value, "view");
+        return renderXhtml(model, currentUser, profile, value, "view", hints);
+    }
+
+    @Nonnull
+    @HtmlSafe
+    public String renderEditXhtml(@Nonnull ElementModel model, @Nullable User currentUser, @Nonnull Profile profile, @Nullable Hints hints) {
+        final String value = profile.getValue(model);
+        return renderXhtml(model, currentUser, profile, value, "edit", hints);
+    }
+
+    @Nonnull
+    @HtmlSafe
+    public String renderViewXhtml(@Nonnull ElementModel model, @Nullable User currentUser, @Nonnull Profile profile) {
+        return renderViewXhtml(model, currentUser, profile, null);
     }
 
     @Nonnull
     @HtmlSafe
     public String renderEditXhtml(@Nonnull ElementModel model, @Nullable User currentUser, @Nonnull Profile profile) {
-        final String value = profile.getValue(model);
-        return renderXhtml(model, currentUser, profile, value, "edit");
+        return renderEditXhtml(model, currentUser, profile, null);
     }
 
     @Nonnull
     @HtmlSafe
-    protected String renderXhtml(@Nonnull ElementModel model, @Nullable User currentUser, @Nonnull Profile profile, @Nullable String value, @Nonnull String mode) {
+    protected String renderXhtml(@Nonnull ElementModel model, @Nullable User currentUser, @Nonnull Profile profile, @Nullable String value, @Nonnull String mode, @Nullable Hints hints) {
         final Map<String, Object> context = defaultVelocityContext();
         context.put("readOnly", !isRenderOfEditAllowedFor(model, currentUser, profile));
         context.put("value", value);
@@ -188,6 +196,9 @@ public class ElementRenderer implements DisposableBean {
         context.put("renderContext", new RenderContext());
         context.put("nodeId", nodeIdFor(model, profile));
         context.put("elementRenderer", this);
+        context.put("hints", nonNullHints(hints));
+        context.put("enableUserLinkIfPossible", enableUserLinkIfPossible);
+        context.put("fullNameTagName", fullNameTagName);
         final String templateName = getXhtmlTemplateNameFor(model, mode);
        return getRenderedTemplate(templateName, context);
     }

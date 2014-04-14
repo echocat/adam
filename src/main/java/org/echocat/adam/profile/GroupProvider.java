@@ -25,6 +25,7 @@ import com.atlassian.confluence.user.UserDetailsManager;
 import org.apache.commons.collections15.map.LRUMap;
 import org.echocat.adam.configuration.Configuration;
 import org.echocat.adam.configuration.ConfigurationRepository;
+import org.echocat.adam.configuration.profile.Element;
 import org.echocat.adam.configuration.profile.Profile;
 import org.echocat.adam.localization.Localization;
 import org.echocat.adam.profile.element.ElementModel;
@@ -47,6 +48,8 @@ public class GroupProvider implements Iterable<Group> {
 
     @Nonnull
     private final Map<Iterable<org.echocat.adam.configuration.profile.Group>, Iterable<Group>> _cache = synchronizedMap(new LRUMap<Iterable<org.echocat.adam.configuration.profile.Group>, Iterable<Group>>(3));
+    @Nonnull
+    private final Map<Iterable<org.echocat.adam.configuration.profile.Group>, Set<String>> _elementIdsCache = synchronizedMap(new LRUMap<Iterable<org.echocat.adam.configuration.profile.Group>, Set<String>>(3));
 
     @Nonnull
     private final ConfigurationRepository _configurationRepository;
@@ -60,6 +63,42 @@ public class GroupProvider implements Iterable<Group> {
         _configurationRepository = configurationRepository;
         _elementModelProvider = elementModelProvider;
         _standardGroupIds = discoverStandardGroupIdsUsing(userDetailsManager);
+    }
+
+    @Nonnull
+    public Set<String> getAllKnownElementIds() {
+        return getAllKnownElementIdsFor(getConfiguration());
+    }
+
+    @Nonnull
+    public Set<String> getAllKnownElementIdsFor(@Nullable Configuration configuration) {
+        return getAllKnownElementIdsFor(configuration != null ? configuration.getProfile() : null);
+    }
+
+    @Nonnull
+    public Set<String> getAllKnownElementIdsFor(@Nullable Profile profile) {
+        return getAllKnownElementIdsFor(profile != null ? profile.getGroups() : null);
+    }
+
+    @Nonnull
+    public Set<String> getAllKnownElementIdsFor(@Nullable Iterable<org.echocat.adam.configuration.profile.Group> original) {
+        Set<String> result = _elementIdsCache.get(original);
+        if (result == null) {
+            result = new HashSet<>();
+            if (original != null) {
+                for (final org.echocat.adam.configuration.profile.Group group : original) {
+                    final List<Element> elements = group.getElements();
+                    if (elements != null) {
+                        for (final Element element : elements) {
+                            result.add(element.getId());
+                        }
+                    }
+                }
+            }
+            result = asImmutableSet(result);
+            _elementIdsCache.put(original, result);
+        }
+        return result;
     }
 
     @Override
@@ -97,7 +136,7 @@ public class GroupProvider implements Iterable<Group> {
                     idToGroup.put(standardId, new StandardGroup(standardId));
                 }
             }
-            result = idToGroup.values();
+            result = asImmutableSet(idToGroup.values());
             _cache.put(original, result);
         }
         return result;

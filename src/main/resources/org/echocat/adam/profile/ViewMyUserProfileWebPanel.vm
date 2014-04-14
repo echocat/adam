@@ -1,0 +1,4 @@
+#* @vtlvariable name="username" type="java.lang.String" *#
+<div class="adam-profile-webpanel">
+${helper.renderConfluenceMacro("{user-profile:username=%s|border=hidden|avatar=hidden|groupLabels=big}", $username)}
+</div>

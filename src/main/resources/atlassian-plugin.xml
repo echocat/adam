@@ -65,6 +65,7 @@
 
     <component key="configurationRepository" name="Configuration repository" class="org.echocat.adam.configuration.ConfigurationRepository" />
     <component key="accessProvider" name="Access provider" class="org.echocat.adam.access.AccessProvider" />
+    <component key="viewProvider" name="View provider" class="org.echocat.adam.view.ViewProvider" />
     <component key="groupProvider" name="Group provider" class="org.echocat.adam.profile.GroupProvider" />
     <component key="profileProvider" name="Profile provider" class="org.echocat.adam.profile.ProfileProvider" />
     <component key="profileModelProvider" name="Profile model provider" class="org.echocat.adam.profile.ProfileModelProvider" />
@@ -106,28 +107,37 @@
         <context>atl.general</context>
     </web-resource>
 
+    <web-resource key="userProfileMarcoBrowserResources" name="User profile marco browser resources">
+        <transformation extension="js">
+            <transformer key="jsI18n"/>
+        </transformation>
+
+        <resource type="download" name="UserProfileMarco.parameter.elements.js" location="org/echocat/adam/profile/UserProfileMarco.parameter.elements.js"/>
+        <resource type="download" name="UserProfileMarco.parameters.css" location="org/echocat/adam/profile/UserProfileMarco.parameters.css"/>
+        <dependency>confluence.editor.actions:editor-macro-browser</dependency>
+        <context>macro-browser</context>
+    </web-resource>
+
     <xhtml-macro name="user-profile" key="userProfileMacro" class="org.echocat.adam.profile.UserProfileMacro" icon="/images/icons/profilepics/anonymous.png">
         <category name="confluence-content" />
         <parameters>
             <parameter name="username" type="username" required="true" />
+            <parameter name="border" type="boolean" default="true" />
+            <parameter name="avatar" type="boolean" default="true" />
+            <parameter name="groupLabels" type="boolean" default="true" />
+            <parameter name="labels" type="boolean" default="true" />
+            <parameter name="elements" type="string" default="$$view:default$$"/>
         </parameters>
     </xhtml-macro>
 
     <macro name="user-profile" key="userProfileMacroOld" class="org.echocat.adam.profile.UserProfileMacroOld" icon="/images/icons/profilepics/anonymous.png">
         <category name="confluence-content" />
-        <parameters>
-            <parameter name="username" type="username" required="true" />
-        </parameters>
     </macro>
 
     <web-panel key="viewMyUserProfileWebPanel" name="View my user profile WebPanel" location="atl.confluence.userprofile.info" weight="100" class="org.echocat.adam.profile.ViewMyUserProfileWebPanel" />
     <web-panel key="editUserProfileWebPanel" name="Edit user profile WebPanel" location="atl.confluence.userprofile.edit" weight="100" class="org.echocat.adam.profile.EditUserProfileWebPanel" />
 
     <!-- =================================================================================================================== -->
-
-    <!-- conveyor name="Action overrides" key="actionOverrides" state="enabled">
-        <resource type="xml" name="conveyor-config" location="/org/echocat/adam/convoyed/conveyor-config.xml" />
-    </conveyor -->
 
     <listener name="Action Conveyor" class="org.randombits.confluence.conveyor.ConveyorListener" key="actionConveyor">
         <description>Sets up the action conveyor for this plugin.</description>
@@ -161,13 +171,13 @@
         <resource type="download" name="addon/hint/xml-hint.js" location="org/echocat/adam/resources/codemirror/addon/hint/xml-hint.js" />
         <resource type="download" name="addon/comment/comment.js" location="org/echocat/adam/resources/codemirror/addon/comment/comment.js" />
         <resource type="download" name="addon/edit/closetag.js" location="org/echocat/adam/resources/codemirror/addon/edit/closetag.js" />
-        <context>atl.general</context>
+        <context>atl.admin</context>
     </web-resource>
 
     <web-resource key="administrationResources" name="Administration resources">
         <resource type="download" name="AdministrationAction.js" location="/org/echocat/adam/administration/AdministrationAction.js"/>
         <resource type="download" name="AdministrationAction.css" location="/org/echocat/adam/administration/AdministrationAction.css"/>
-        <context>atl.general</context>
+        <context>atl.admin</context>
     </web-resource>
 
     <web-item key="administrationWebItem" name="Administration Web-Item" section="system.admin/security" weight="110">

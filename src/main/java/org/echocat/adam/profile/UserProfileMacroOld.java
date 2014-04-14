@@ -34,6 +34,7 @@ import com.atlassian.renderer.v2.macro.MacroException;
 import com.atlassian.renderer.v2.macro.WysiwygBodyType;
 import org.echocat.adam.localization.LocalizationHelper;
 import org.echocat.adam.profile.element.ElementRenderer;
+import org.echocat.adam.view.ViewProvider;
 
 import javax.annotation.Nonnull;
 import java.util.Map;
@@ -61,8 +62,10 @@ public class UserProfileMacroOld implements Macro {
     private final LocaleManager _localeManager;
     @Nonnull
     private final PermissionManager _permissionManager;
+    @Nonnull
+    private final ViewProvider _viewProvider;
 
-    public UserProfileMacroOld(@Nonnull GroupProvider groupProvider, @Nonnull ProfileProvider profileProvider, @Nonnull UserAccessor userAccessor, @Nonnull LocalizationHelper localizationHelper, @Nonnull ElementRenderer elementRenderer, @Nonnull GroupRenderer groupRenderer, @Nonnull LocaleManager localeManager, @Nonnull PermissionManager permissionManager) {
+    public UserProfileMacroOld(@Nonnull GroupProvider groupProvider, @Nonnull ProfileProvider profileProvider, @Nonnull UserAccessor userAccessor, @Nonnull LocalizationHelper localizationHelper, @Nonnull ElementRenderer elementRenderer, @Nonnull GroupRenderer groupRenderer, @Nonnull LocaleManager localeManager, @Nonnull PermissionManager permissionManager, @Nonnull ViewProvider viewProvider) {
         _groupProvider = groupProvider;
         _profileProvider = profileProvider;
         _userAccessor = userAccessor;
@@ -71,6 +74,7 @@ public class UserProfileMacroOld implements Macro {
         _groupRenderer = groupRenderer;
         _localeManager = localeManager;
         _permissionManager = permissionManager;
+        _viewProvider = viewProvider;
     }
 
     @Override
@@ -95,7 +99,7 @@ public class UserProfileMacroOld implements Macro {
 
     @Override
     public String execute(Map map, String body, RenderContext renderContext) throws MacroException {
-        final UserProfileMacro macro = new UserProfileMacro(_groupProvider, _profileProvider, _userAccessor, _localizationHelper, _elementRenderer, _groupRenderer, _localeManager, _permissionManager);
+        final UserProfileMacro macro = new UserProfileMacro(_profileProvider, _userAccessor, _localizationHelper, _elementRenderer, _groupRenderer, _localeManager, _permissionManager, _viewProvider);
         try {
             // noinspection unchecked
             return macro.execute(map, body, new DefaultConversionContext(renderContext));
