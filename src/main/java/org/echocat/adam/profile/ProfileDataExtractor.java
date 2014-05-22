@@ -92,6 +92,6 @@ public class ProfileDataExtractor implements Extractor {
     }
 
     protected boolean canIndex(@Nonnull ElementModel elementModel) {
-        return !PERSONAL_INFORMATION_ELEMENT_ID.equals(elementModel.getId());
+        return elementModel.isSearchable() && !PERSONAL_INFORMATION_ELEMENT_ID.equals(elementModel.getId());
     }
 }
