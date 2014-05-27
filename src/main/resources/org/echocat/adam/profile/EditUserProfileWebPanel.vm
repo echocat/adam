@@ -28,10 +28,11 @@
                             </label>
                             $!{elementRenderer.renderEditXhtml($elementModel, $currentUser, $profile)}
                         </div>
-                        #if($!helpText != "")
+                        #if("$!helpText" != "")
                             <div class="profile-element field-group editMode">
                                 <div class="hints"><span class="hints-text">${helpText}</span></div>
                             </div>
+                        #set ($helpText = "")
                         #end
                     #end
                 #end

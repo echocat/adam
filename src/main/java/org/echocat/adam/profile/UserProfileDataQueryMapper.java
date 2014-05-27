@@ -66,7 +66,9 @@ public class UserProfileDataQueryMapper implements LuceneQueryMapper<UserProfile
         if (columns != null) {
             for (final Column column : columns) {
                 for (final ColumnElementModel elementModel : column) {
-                    fields.add("element." + elementModel.getId());
+                    if (elementModel.isSearchable()) {
+                        fields.add("profile." + elementModel.getId());
+                    }
                 }
             }
         }

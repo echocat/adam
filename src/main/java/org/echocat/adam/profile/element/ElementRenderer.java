@@ -25,6 +25,7 @@ import com.atlassian.confluence.setup.settings.SettingsManager;
 import com.atlassian.confluence.user.UserAccessor;
 import com.atlassian.confluence.velocity.htmlsafe.HtmlSafe;
 import com.atlassian.renderer.RenderContext;
+import com.atlassian.confluence.renderer.PageContext;
 import com.atlassian.renderer.WikiStyleRenderer;
 import com.atlassian.user.User;
 import org.echocat.adam.profile.Profile;
@@ -194,6 +195,7 @@ public class ElementRenderer implements DisposableBean {
         context.put("profile", profile);
         context.put("wikiStyleRenderer", _wikiStyleRenderer);
         context.put("renderContext", new RenderContext());
+        context.put("pageContext", new PageContext());
         context.put("nodeId", nodeIdFor(model, profile));
         context.put("elementRenderer", this);
         context.put("hints", nonNullHints(hints));

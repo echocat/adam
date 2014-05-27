@@ -75,9 +75,11 @@ public class ProfileDataExtractor implements Extractor {
                 final String value = profile.getValueForSearchIndex(elementModel);
                 if (value != null) {
                     if (canIndex(elementModel)) {
-                        defaultSearchable.append(value);
-                        defaultSearchable.append("\n");
-                        document.add(new TextField("element." + elementModel.getId(), value, YES));
+                        if (elementModel.isSearchable()) {
+                            defaultSearchable.append(value);
+                            defaultSearchable.append("\n");
+                        }
+                        document.add(new TextField("profile." + elementModel.getId(), value, YES));
                     }
                 }
             }
