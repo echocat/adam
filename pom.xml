@@ -39,8 +39,8 @@
         <version.org.javassist>3.18.1-GA</version.org.javassist>
         <version.org.slf4j>1.7.5</version.org.slf4j>
         <version.org.eclipse.persistence>2.5.1</version.org.eclipse.persistence>
-        <version.com.atlassian.confluence>5.3.4</version.com.atlassian.confluence>
-        <version.com.atlassian.confluence.data>5.3.4</version.com.atlassian.confluence.data>
+        <version.com.atlassian.confluence>5.5.2</version.com.atlassian.confluence>
+        <version.com.atlassian.confluence.data>5.5.2</version.com.atlassian.confluence.data>
         <version.com.atlassian.maven.plugins.amps>4.2.10</version.com.atlassian.maven.plugins.amps>
         <version.com.atlassian.plugins.testrunner>1.1.1</version.com.atlassian.plugins.testrunner>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
