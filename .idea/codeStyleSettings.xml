@@ -59,7 +59,6 @@
           <option name="KEEP_SIMPLE_METHODS_IN_ONE_LINE" value="true" />
           <option name="KEEP_SIMPLE_CLASSES_IN_ONE_LINE" value="true" />
           <option name="KEEP_MULTIPLE_EXPRESSIONS_IN_ONE_LINE" value="true" />
-          <option name="WRAP_COMMENTS" value="true" />
           <option name="IF_BRACE_FORCE" value="3" />
           <option name="DOWHILE_BRACE_FORCE" value="3" />
           <option name="WHILE_BRACE_FORCE" value="3" />
@@ -80,6 +79,10 @@
           <option name="PARENT_SETTINGS_INSTALLED" value="true" />
         </codeStyleSettings>
         <codeStyleSettings language="PHP">
+          <option name="WRAP_COMMENTS" value="true" />
+          <option name="PARENT_SETTINGS_INSTALLED" value="true" />
+        </codeStyleSettings>
+        <codeStyleSettings language="TypeScript">
           <option name="WRAP_COMMENTS" value="true" />
           <option name="PARENT_SETTINGS_INSTALLED" value="true" />
         </codeStyleSettings>

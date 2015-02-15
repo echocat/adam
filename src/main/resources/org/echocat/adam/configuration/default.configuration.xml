@@ -54,9 +54,6 @@ See https://github.com/echocat/adam for documentation.
                     <default view="allowed" edit="allowed" />
                 </access>
             </element>
-            <element id="test">
-                <localization locale="en_US" title="Test" />
-            </element>
             <element id="phone" type="phoneNumber" defaultForReports="true">
                 <contextAttribute id="telephoneNumber" />
                 <template>$!{telephoneNumber}</template>
