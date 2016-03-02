@@ -25,7 +25,7 @@
                             #end
                         </fieldset>
                     #else
-                        #tag( "Hidden" "name='username'" "size='50'" "value='$!action.user.name'" )
+                        #tag( "Hidden" "name='username'" "value='$!action.user.name'" )
                     #end
 
                     #tag( "Submit" "theme='aui'" )

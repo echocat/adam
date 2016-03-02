@@ -2,7 +2,7 @@
 <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   ~ **** BEGIN LICENSE BLOCK *****
   ~
-  ~ echocat Adam, Copyright (c) 2014 echocat
+  ~ echocat Adam, Copyright (c) 2014-2016 echocat
   ~
   ~ This library is free software; you can redistribute it and/or
   ~ modify it under the terms of the GNU Lesser General Public
@@ -21,9 +21,7 @@
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
 
 <atlassian-plugin key="${project.groupId}.${project.artifactId}" name="${project.name}" plugins-version="2"
-                  xmlns="http://www.atlassian.com/schema/plugins"
-                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                  xsi:schemaLocation="http://www.atlassian.com/schema/plugins https://bitbucket.org/atlassian/atlassian-xsd/raw/5e78bb51fddadbfacb3386551675cf00f1f94566/confluence/confluence-3.5.xsd">
+                  xmlns="http://www.atlassian.com/schema/plugins">
     <plugin-info>
         <description>${project.description}</description>
         <version>${project.version}</version>

@@ -2,7 +2,7 @@
 <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   ~ **** BEGIN LICENSE BLOCK *****
   ~
-  ~ echocat Adam, Copyright (c) 2014 echocat
+  ~ echocat Adam, Copyright (c) 2014-2016 echocat
   ~
   ~ This library is free software; you can redistribute it and/or
   ~ modify it under the terms of the GNU Lesser General Public
@@ -26,7 +26,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.echocat</groupId>
     <artifactId>adam</artifactId>
-    <version>0.2.0</version>
+    <version>0.1.10</version>
     <name>echocat Adam</name>
     <packaging>atlassian-plugin</packaging>
 
@@ -35,13 +35,13 @@
     </description>
 
     <properties>
-        <version.org.echocat.jomon>1.4.3</version.org.echocat.jomon>
+        <version.org.echocat.jomon>1.5.0</version.org.echocat.jomon>
         <version.org.javassist>3.18.1-GA</version.org.javassist>
         <version.org.slf4j>1.7.5</version.org.slf4j>
         <version.org.eclipse.persistence>2.5.1</version.org.eclipse.persistence>
-        <version.com.atlassian.confluence>5.8.13</version.com.atlassian.confluence>
-        <version.com.atlassian.confluence.data>5.8.13</version.com.atlassian.confluence.data>
-        <version.com.atlassian.maven.plugins.amps>4.2.10</version.com.atlassian.maven.plugins.amps>
+        <version.com.atlassian.confluence>5.9.5</version.com.atlassian.confluence>
+        <version.com.atlassian.confluence.data>5.9.5</version.com.atlassian.confluence.data>
+        <version.com.atlassian.maven.plugins.amps>6.2.2</version.com.atlassian.maven.plugins.amps>
         <version.com.atlassian.plugins.testrunner>1.1.1</version.com.atlassian.plugins.testrunner>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -97,6 +97,12 @@
         </dependency>
 
         <!-- Confluence dependencies -->
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <version>4.0.0-b01</version>
+            <scope>provided</scope>
+        </dependency>
         <dependency>
             <groupId>com.atlassian.confluence</groupId>
             <artifactId>confluence</artifactId>
@@ -154,12 +160,6 @@
         <dependency>
             <groupId>com.atlassian.confluence.rest</groupId>
             <artifactId>confluence-rest-plugin</artifactId>
-            <version>${version.com.atlassian.confluence}</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.atlassian.confluence.plugins</groupId>
-            <artifactId>confluence-soy</artifactId>
             <version>${version.com.atlassian.confluence}</version>
             <scope>provided</scope>
         </dependency>
@@ -227,11 +227,15 @@
                     <httpPort>1990</httpPort>
                     <product>confluence</product>
                     <productVersion>${version.com.atlassian.confluence}</productVersion>
-                    <enableDevToolbox>true</enableDevToolbox>
+                    <enableDevToolbox>false</enableDevToolbox>
                     <allowGoogleTracking>false</allowGoogleTracking>
                     <installPlugin>true</installPlugin>
                     <instructions>
                         <Import-Package>
+                            org.springframework.ldap.core;version=*,
+                            com.atlassian.crowd.directory.ldap;version=*,
+                            com.atlassian.crowd.directory.ldap.mapper;version=*,
+                            com.atlassian.crowd.directory.ldap.mapper.attribute;version=*,
                             org.randombits.confluence.conveyor;version=*,
                             org.randombits.confluence.conveyor.xwork;version=*,
                             org.randombits.confluence.conveyor.condition;version=*
@@ -267,29 +271,9 @@
                 <checksumPolicy>warn</checksumPolicy>
             </releases>
         </repository>
-        <repository>
-            <id>echocat</id>
-            <url>http://repo.echocat.org/all</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-        </repository>
     </repositories>
 
     <pluginRepositories>
-        <pluginRepository>
-            <id>echocat</id>
-            <url>http://repo.echocat.org/all</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-        </pluginRepository>
         <pluginRepository>
             <id>atlassian-public</id>
             <url>https://maven.atlassian.com/repository/public</url>
@@ -308,17 +292,6 @@
         <system>GitHub</system>
         <url>https://github.com/echocat/adam/issues</url>
     </issueManagement>
-
-    <distributionManagement>
-        <repository>
-            <id>echocat-adam-releases</id>
-            <url>dav:https://repo.echocat.org/adam-releases</url>
-        </repository>
-        <snapshotRepository>
-            <id>echocat-adam-snapshots</id>
-            <url>dav:https://repo.echocat.org/adam-snapshots</url>
-        </snapshotRepository>
-    </distributionManagement>
 
     <scm>
         <connection>scm:git:git@github.com:echocat/adam.git</connection>

@@ -1,7 +1,7 @@
 /*****************************************************************************************
  * *** BEGIN LICENSE BLOCK *****
  *
- * echocat Adam, Copyright (c) 2014 echocat
+ * echocat Adam, Copyright (c) 2014-2016 echocat
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -22,6 +22,7 @@
 package org.echocat.adam.profile;
 
 import com.atlassian.confluence.search.v2.AbstractChainableSearchFilter;
+import com.atlassian.confluence.search.v2.SearchFilter;
 import org.echocat.adam.report.Filter;
 import org.echocat.adam.report.Report;
 
@@ -81,4 +82,8 @@ public class UserProfileDataFilter extends AbstractChainableSearchFilter {
         return "userProfileDataFilter";
     }
 
+    @SuppressWarnings("override")
+    public SearchFilter expand() {
+        return this;
+    }
 }
