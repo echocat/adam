@@ -1,8 +1,5 @@
 <component name="CopyrightManager">
-  <settings default="">
-    <module2copyright>
-      <element module="SourceCode" copyright="echocat" />
-    </module2copyright>
+  <settings default="echocat">
     <LanguageOptions name="__TEMPLATE__">
       <option name="separateBefore" value="true" />
       <option name="separateAfter" value="true" />
