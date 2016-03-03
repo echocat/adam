@@ -1,6 +1,8 @@
 echocat Adam
 ============
 
+[![Join the chat at https://gitter.im/echocat/adam](https://badges.gitter.im/echocat/adam.svg)](https://gitter.im/echocat/adam?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 Synopsis
 --------
 Addon which enhances all user profiles of confluence. It also adds an advanced people directory. The whole addon is configurable by means of an XML, can be localized, supports Velocity templates and supports view and edit restrictions.
