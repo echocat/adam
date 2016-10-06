@@ -1,5 +1,5 @@
 <component name="CopyrightManager">
-  <settings default="echocat">
+  <settings default="">
     <LanguageOptions name="__TEMPLATE__">
       <option name="separateBefore" value="true" />
       <option name="separateAfter" value="true" />

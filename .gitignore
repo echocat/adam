@@ -1,10 +1,4 @@
-/.idea/dictionaries
-/.idea/libraries
-/.idea/ant.xml
-/.idea/misc.xml
-/.idea/uiDesigner.xml
-/.idea/workspace.xml
-/.idea/libraries
-
+/.idea
+/*.iml
 /target
-atlassian-ide-plugin.xml
+
