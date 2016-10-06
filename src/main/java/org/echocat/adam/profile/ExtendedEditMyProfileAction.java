@@ -35,17 +35,16 @@ import static org.echocat.adam.profile.element.ElementModel.EMAIL_ELEMENT_ID;
 import static org.echocat.adam.profile.element.ElementModel.FULL_NAME_ELEMENT_ID;
 import static org.echocat.adam.profile.element.ElementModel.USER_NAME_ELEMENT_ID;
 
-@SuppressWarnings("deprecation")
 public class ExtendedEditMyProfileAction extends EditMyProfileAction {
 
     private Map<String, String[]> _parameters;
 
     @Override
     public String doEdit() throws Exception {
+        final String result = super.doEdit();
         final ConfluenceUser user = getUser();
         final Profile profile = user != null ? profileProvider().provideFor(user) : null;
-        final String result = super.doEdit();
-        if ("success".equals(result)) {
+        if (profile != null && "success".equals(result)) {
             updateFields(profile);
             profile.reIndex();
         }
@@ -56,7 +55,7 @@ public class ExtendedEditMyProfileAction extends EditMyProfileAction {
         for (final Group group : profileModelProvider().get()) {
             for (final ElementModel elementModel : group) {
                 final String id = elementModel.getId();
-                if (!id.equals(FULL_NAME_ELEMENT_ID) && !id.equals(EMAIL_ELEMENT_ID) && !id.equals(USER_NAME_ELEMENT_ID)) {
+                if (id != null && !id.equals(FULL_NAME_ELEMENT_ID) && !id.equals(EMAIL_ELEMENT_ID) && !id.equals(USER_NAME_ELEMENT_ID)) {
                     final String[] plainValues = _parameters.get(id);
                     final String plainValue = plainValues != null && plainValues.length > 0 ? join(plainValues, ' ') : null;
                     if (plainValue != null && elementModel.getAccess().checkEdit(getAuthenticatedUser(), profile).isEditAllowed()) {
