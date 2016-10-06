@@ -1,7 +1,7 @@
 /*****************************************************************************************
  * *** BEGIN LICENSE BLOCK *****
  *
- * echocat Adam, Copyright (c) 2014 echocat
+ * echocat Adam, Copyright (c) 2014-2016 echocat
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -29,6 +29,8 @@ import com.atlassian.confluence.user.UserAccessor;
 import com.atlassian.confluence.user.UserDetailsManager;
 import com.atlassian.user.User;
 import org.echocat.adam.profile.element.ElementModel;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -38,6 +40,8 @@ import static com.atlassian.confluence.setup.bandana.ConfluenceBandanaContext.GL
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 
 public class Profile implements User {
+
+    private static final Logger LOG = LoggerFactory.getLogger(Profile.class);
 
     @Nonnull
     private final UserAccessor _userAccessor;
@@ -77,17 +81,25 @@ public class Profile implements User {
     }
 
     public void setValue(@Nonnull ElementModel of, @Nullable String to) {
-        final String id = of.getId();
-        if (ElementModel.FULL_NAME_ELEMENT_ID.equals(id)) {
-            _fullName = to;
-            _userAccessor.saveUser(this);
-        } else if (ElementModel.EMAIL_ELEMENT_ID.equals(id)) {
-            _email = to;
-            _userAccessor.saveUser(this);
-        } else if (ElementModel.PERSONAL_INFORMATION_ELEMENT_ID.equals(id)) {
-            setPersonalInformationBody(to);
-        } else {
-            setStandardValue(of, to);
+        try {
+            final String id = of.getId();
+            if (ElementModel.FULL_NAME_ELEMENT_ID.equals(id)) {
+                _fullName = to;
+                _userAccessor.saveUser(this);
+            } else if (ElementModel.EMAIL_ELEMENT_ID.equals(id)) {
+                _email = to;
+                _userAccessor.saveUser(this);
+            } else if (ElementModel.PERSONAL_INFORMATION_ELEMENT_ID.equals(id)) {
+                setPersonalInformationBody(to);
+            } else {
+                setStandardValue(of, to);
+            }
+        } catch (final NullPointerException e) {
+            if (("Unable to find user mapping for " + getName()).equals(e.getMessage())) {
+                LOG.warn("Could not modify " + getName() + ". If this is caused by a rename of a user you can safely ignore this message.");
+            } else {
+                throw e;
+            }
         }
     }
 
@@ -125,7 +137,7 @@ public class Profile implements User {
     protected String getPersonalInformationBody() {
         // noinspection deprecation
         final PersonalInformation information = _personalInformationManager.getPersonalInformation(this);
-        final String body = information != null ? information.getBodyAsString() : null;
+        final String body = information.getBodyAsString();
         return body == null || isEmpty(body.trim()) ? null : body;
     }
 

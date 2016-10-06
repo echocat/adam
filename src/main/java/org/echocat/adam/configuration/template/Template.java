@@ -1,7 +1,7 @@
 /*****************************************************************************************
  * *** BEGIN LICENSE BLOCK *****
  *
- * echocat Adam, Copyright (c) 2014 echocat
+ * echocat Adam, Copyright (c) 2014-2016 echocat
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -23,6 +23,7 @@ package org.echocat.adam.configuration.template;
 
 import org.echocat.adam.template.TemplateFormat;
 import org.echocat.adam.template.TemplateSupport;
+import org.eclipse.persistence.oxm.annotations.XmlValueExtension;
 
 import javax.annotation.Nonnull;
 import javax.xml.bind.annotation.XmlAttribute;
@@ -47,6 +48,7 @@ public class Template extends TemplateSupport {
     }
 
     @XmlValue
+    @XmlValueExtension
     public void setSource(@Nonnull String source) {
         _source = source;
     }

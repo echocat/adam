@@ -1,5 +1,11 @@
+#* @vtlvariable name="currentUser" type="com.atlassian.user.User" *#
+#* @vtlvariable name="user" type="com.atlassian.user.User" *#
+#* @vtlvariable name="profile" type="org.echocat.adam.profile.Profile" *#
 #* @vtlvariable name="groups" type="java.util.List<org.echocat.adam.profile.Group>" *#
+#* @vtlvariable name="elementRenderer" type="org.echocat.adam.profile.element.ElementRenderer" *#
 #* @vtlvariable name="groupRenderer" type="org.echocat.adam.profile.GroupRenderer" *#
+#* @vtlvariable name="localizationHelper" type="org.echocat.adam.localization.LocalizationHelper" *#
+#* @vtlvariable name="locale" type="java.util.Locale" *#
 #requireResource("org.echocat.adam:userProfileResources")
 <div class="adam-profile-body">
 
@@ -15,13 +21,13 @@
                         #set($title = $!localizationHelper.getTitleFor($elementModel, $locale))
                         #set($helpText = $!localizationHelper.findHelpTextFor($elementModel, $locale))
                         #set($nodeId = $!elementRenderer.nodeIdFor($elementModel, $profile))
-                        #if($elementModel.id == "email" and $elementRenderer.isRenderOfEidAllowedFor($elementModel, $currentUser, $profile))
+                        #if($elementModel.id == "email" and $elementRenderer.isRenderOfEditAllowedFor($elementModel, $currentUser, $profile))
                             <input type="hidden" id="originalemail" value="$!{user.email}"/>
                             <input type="hidden" id="passwordconfirmation" value="" name="passwordconfirmation"/>
                         #end
                         <div class="profile-element field-group editMode">
                             <label id="labelFor-${nodeId}" for="${nodeId}">${elementRenderer.plainToXhtml($elementModel, $title)}
-                                #if(($elementModel.id == "fullName" or $elementModel.id == "email") and $elementRenderer.isRenderOfEidAllowedFor($elementModel, $currentUser, $profile))
+                                #if(($elementModel.id == "fullName" or $elementModel.id == "email") and $elementRenderer.isRenderOfEditAllowedFor($elementModel, $currentUser, $profile))
                                     <span class="aui-icon icon-required"></span>
                                     <span class="content">$i18n.get("required.field")</span>
                                 #end

@@ -1,7 +1,7 @@
 /*****************************************************************************************
  * *** BEGIN LICENSE BLOCK *****
  *
- * echocat Adam, Copyright (c) 2014 echocat
+ * echocat Adam, Copyright (c) 2014-2016 echocat
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -52,7 +52,7 @@ import static org.echocat.adam.configuration.profile.Element.ContextAttribute;
 import static org.eclipse.persistence.jaxb.MarshallerProperties.INDENT_STRING;
 import static org.eclipse.persistence.jaxb.MarshallerProperties.NAMESPACE_PREFIX_MAPPER;
 
-public class ConfigurationMarshaller {
+public final class ConfigurationMarshaller {
 
     private static final JAXBContext JAXB_CONTEXT;
     private static final ConfigurationNamespacePrefixMapper NAMESPACE_PREFIX_MAPPER_INSTANCE = new ConfigurationNamespacePrefixMapper();
@@ -87,7 +87,7 @@ public class ConfigurationMarshaller {
         }
     }
 
-    @Nonnull
+    @Nullable
     public static Configuration unmarshall(@Nonnull Reader content) {
         return unmarshall(content, null);
     }
@@ -137,13 +137,13 @@ public class ConfigurationMarshaller {
     }
 
     @Nonnull
-    protected static Unmarshaller unmarshallerFor(@Nonnull Object element, @Nullable String systemId) {
+    private static Unmarshaller unmarshallerFor(@Nonnull Object element, @Nullable String systemId) {
         final Unmarshaller unmarshaller;
         try {
             unmarshaller = JAXB_CONTEXT.createUnmarshaller();
             unmarshaller.setSchema(SCHEMA);
         } catch (final JAXBException e) {
-            throw new ConfigurationException("Could not create unmarshaller to unmarshall " + systemId != null ? systemId : element.toString() + ".", e);
+            throw new ConfigurationException("Could not create unmarshaller to unmarshall " + (systemId != null ? systemId : element.toString()) + ".", e);
         }
         return unmarshaller;
     }

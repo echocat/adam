@@ -1,9 +1,9 @@
 <html>
-	<head>
+    <head>
         <title>$generalUtil.htmlEncode($pageTitle)</title>
         #requireResource("confluence.web.resources:aui-forms")
         #requireResource("confluence.userstatus:userstatus-resources")
-	</head>
+    </head>
 
     #applyDecorator("root")
         #decoratorParam("context" "profile")
