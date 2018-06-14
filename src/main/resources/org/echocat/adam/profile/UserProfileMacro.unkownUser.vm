@@ -1,2 +1,0 @@
-#requireResource("org.echocat.adam:userProfileResources")
-<div class="profile-marco error">${i18n.getText("org.echocat.adam.unkownUser", $username)}</div>
