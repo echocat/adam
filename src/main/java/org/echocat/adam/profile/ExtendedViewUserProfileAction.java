@@ -30,7 +30,7 @@ import static org.echocat.adam.extensions.ExtendedWebInterfaceManager.extendedWe
 public class ExtendedViewUserProfileAction extends ViewUserProfileAction {
 
     @Override
-    public String execute() throws Exception {
+    public String execute() {
         final String result = super.execute();
         return result;
     }
