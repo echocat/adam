@@ -77,7 +77,7 @@ public class Profile implements User {
     }
 
     public void reIndex() {
-        _confluenceIndexer.index(getPersonalInformation());
+        _confluenceIndexer.index(getOrCreatePersonalInformation());
     }
 
     public void setValue(@Nonnull ElementModel of, @Nullable String to) {
@@ -120,7 +120,7 @@ public class Profile implements User {
     }
 
     @Nonnull
-    public PersonalInformation getPersonalInformation() {
+    public PersonalInformation getOrCreatePersonalInformation() {
         return _personalInformationManager.getOrCreatePersonalInformation(this);
     }
 
@@ -136,7 +136,7 @@ public class Profile implements User {
     @Nullable
     protected String getPersonalInformationBody() {
         // noinspection deprecation
-        final PersonalInformation information = _personalInformationManager.getPersonalInformation(this);
+        final PersonalInformation information = _personalInformationManager.getOrCreatePersonalInformation(this);
         final String body = information.getBodyAsString();
         return body == null || isEmpty(body.trim()) ? null : body;
     }

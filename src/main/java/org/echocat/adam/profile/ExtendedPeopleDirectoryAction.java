@@ -92,7 +92,7 @@ public class ExtendedPeopleDirectoryAction extends PeopleDirectoryAction {
     }
 
     @Override
-    public String doBrowse() throws Exception {
+    public String doBrowse() {
         setQueryString("");
         final Report report = getEffectiveReport();
         _reports = determinateReports();
