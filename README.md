@@ -1,5 +1,12 @@
 # echocat Adam
 
+## Discontinued
+
+⚠️⚠️⚠️ **The support of this plugin is currently discontinued by echocat**, ⚠️⚠️⚠️<br>
+...because [I](https://github.com/blaubaer) do not have any longer access to working Confluence instances.
+
+👀 We're looking for people who are interested to support this project from now on. Please feel free to get in contact with us via contact@echocat.org.
+
 ## Synopsis
 
 Addon which enhances all user profiles of confluence. It also adds an advanced people directory. The whole addon is configurable by means of an XML, can be localized, supports Velocity templates and supports view and edit restrictions.
